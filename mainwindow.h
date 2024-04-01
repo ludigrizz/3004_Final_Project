@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,5 +19,16 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    bool isPowerOn;
+
+private slots:
+    void startNewSession();
+    void getSessionLogs();
+    void openDateTimeDialog();
+    void pauseSession();
+    void stopSession();
+    void resumeSession();
+    void togglePower();
+//    void updateDateTime(const QDateTime &dateTime);
 };
 #endif // MAINWINDOW_H
