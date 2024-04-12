@@ -9,7 +9,8 @@ Elsa: Use cases 1-3 (New Session, Session Log, Date & Time use cases).
 
 Sofia: Use cases 4-6 (Low battery response, Connection loss, Therapy viewing with PC use cases).
 Created the neureset device UIs (minus stylesheets), including main menu view, the date/time setup page,
-running session page, and session log (on device) page.
+running session page, and session log (on device) page. Begun integrating the date/time dialog for
+[date & time use case and for session timeouts](https://github.com/ludigrizz/3004_Final_Project/pull/19)
 
 Organization:
 
