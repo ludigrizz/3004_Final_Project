@@ -1,6 +1,6 @@
 **3004 Final Project: Neureset Device**
 
-Team members: Christina, Elsa Faisal, Sofia Qureshi
+Team members: Christina Ngwa, Elsa Faisal, Sofia Qureshi
 
 What each member did:
 Christina: Created 5 empty header files.
