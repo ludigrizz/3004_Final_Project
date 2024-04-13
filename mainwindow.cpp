@@ -56,11 +56,43 @@ void MainWindow::openDateTimeDialog() {
 //void MainWindow::updateDateTime(const QDateTime &dateTime) {
 //    qDebug() << "New date and time selected: " << dateTime.toString();
 //}
+
 void MainWindow::stopSession() {
     qInfo("user pressed stop session");
 }
 
 void MainWindow::togglePower() {
     qInfo("user pressed power button");
+
+     //
+
+    //this->toggleBlueLight();
+    //this->toggleGreenLight();
+    //this->toggleRedlight();
 }
+
+void MainWindow::toggleBlueLight() {
+//    if (getPowerState() == ON) {
+//        ui->blueLight->setStyleSheet("background-color: blue;");
+//    } else {
+//        ui->blueLight->setStyleSheet("background-color: darkGray;");
+//    }
+}
+
+void MainWindow::toggleGreenLight() {
+    //    if (getPowerState() == ON && treatment is applied) {
+    //        ui->blueLight->setStyleSheet("background-color: green;");
+    //    } else {
+    //        ui->blueLight->setStyleSheet("background-color: darkGray;");
+    //    }
+}
+
+void MainWindow::toggleRedLight() {
+    //    if (getPowerState() == ON && getConnectionState() == DISCONNECTED) {
+    //        ui->blueLight->setStyleSheet("background-color: red;");
+    //    } else {
+    //        ui->blueLight->setStyleSheet("background-color: darkGray;");
+    //    }
+}
+
 

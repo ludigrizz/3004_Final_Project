@@ -17,9 +17,32 @@ HEADERS += \
     LED.h \
     datetimedialog.h \
     deviceControl.h \
-    mainwindow.h
-    batteryState.h \
-    connectionState.h \
+    deviceStates.h \
+    deviceStates.h \
+    mainwindow.h \
+    sessionLog.h
+    contoller.h \
+    mainwindow.h \
+    neuroHeadset.h \
+    powerState.h \
+    sessionLog.h
+
+FORMS += \
+    mainwindow.ui
+
+# Default rules for deployment.
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
+
+
+HEADERS += \
+    LED.h \
+    datetimedialog.h \
+    deviceControl.h \
+    deviceStates.h \
+    mainwindow.h \
+    sessionLog.h
     contoller.h \
     mainwindow.h \
     neuroHeadset.h \

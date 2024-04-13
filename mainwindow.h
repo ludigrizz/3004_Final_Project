@@ -29,6 +29,9 @@ private slots:
     void stopSession();
     void resumeSession();
     void togglePower();
+    void toggleBlueLight();
+    void toggleGreenLight();
+    void toggleRedLight();
 //    void updateDateTime(const QDateTime &dateTime);
 };
 #endif // MAINWINDOW_H
