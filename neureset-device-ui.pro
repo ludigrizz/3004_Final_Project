@@ -23,6 +23,7 @@ HEADERS += \
     contoller.h \
     mainwindow.h \
     neuroHeadset.h \
+    powerState.h \
     sessionLog.h
 
 FORMS += \
