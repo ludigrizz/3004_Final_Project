@@ -94,7 +94,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;EEG HEADSET&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="newSessionBtn">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -120,7 +120,7 @@ p, li { white-space: pre-wrap; }
      <string>CONFIRM</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="sessionLogBtn">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -195,7 +195,7 @@ p, li { white-space: pre-wrap; }
      <number>24</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_7">
+   <widget class="QPushButton" name="powerBtn">
     <property name="geometry">
      <rect>
       <x>240</x>
@@ -208,7 +208,7 @@ p, li { white-space: pre-wrap; }
      <string>ON/OFF</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_8">
+   <widget class="QPushButton" name="dateAndTimeBtn">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -221,7 +221,7 @@ p, li { white-space: pre-wrap; }
      <string>DATE AND TIME</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_9">
+   <widget class="QPushButton" name="stopBtn">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -234,7 +234,7 @@ p, li { white-space: pre-wrap; }
      <string>STOP</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_10">
+   <widget class="QPushButton" name="pauseBtn">
     <property name="geometry">
      <rect>
       <x>130</x>
@@ -247,7 +247,7 @@ p, li { white-space: pre-wrap; }
      <string>PAUSE</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_11">
+   <widget class="QPushButton" name="startBtn">
     <property name="geometry">
      <rect>
       <x>200</x>
