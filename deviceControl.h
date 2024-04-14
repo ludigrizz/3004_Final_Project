@@ -9,6 +9,10 @@
 //public:
 //    DeviceControl(QObject *parent = nullptr);
 
+// void getPowerState();
+// void getConnectionState();
+// void getBatteryState();
+
 ////signals:
 ////    void newSessionStarted();
 ////    void sessionPaused();
@@ -20,7 +24,8 @@
 //    void pauseSession();
 //    void resumeSession();
 //    void endSession();
-
+//    void chargeBattery(int);
+//    void loseBattery(int)
 
 //};
 
