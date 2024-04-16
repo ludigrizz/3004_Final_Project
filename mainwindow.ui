@@ -70,7 +70,7 @@ p, li { white-space: pre-wrap; }
      <string notr="true">background-color: rgb(135,206,250);</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QPushButton" name="startBtn">
@@ -162,19 +162,6 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="text">
        <string>d</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="powerBtn">
-      <property name="geometry">
-       <rect>
-        <x>270</x>
-        <y>10</y>
-        <width>51</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>ON/OFF</string>
       </property>
      </widget>
      <widget class="QProgressBar" name="progressBar">
@@ -576,6 +563,19 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="powerBtn">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>0</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ON/OFF</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
