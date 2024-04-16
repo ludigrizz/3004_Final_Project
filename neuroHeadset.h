@@ -1,4 +1,0 @@
-#ifndef NEUROHEADSET_H
-#define NEUROHEADSET_H
-
-#endif // NEUROHEADSET_H

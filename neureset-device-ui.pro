@@ -18,12 +18,6 @@ HEADERS += \
     datetimedialog.h \
     deviceControl.h \
     mainwindow.h
-    batteryState.h \
-    connectionState.h \
-    contoller.h \
-    mainwindow.h \
-    neuroHeadset.h \
-    sessionLog.h
 
 FORMS += \
     mainwindow.ui

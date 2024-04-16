@@ -1,22 +1,27 @@
-#ifndef LED_H
-#define MAINWINDOW_H
+// #ifndef LED_H
+// #define LED_H
 
-#include <QMainWindow>
+// #include <QObject>
+// #include <QPushButton>
+// #include <QTimer>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+// class LED : public QObject
+// {
+//     Q_OBJECT
+// public:
+//     explicit LED(QPushButton *button, QObject *parent = nullptr);
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
+// public slots:
+//     void toggleState();
+//     void startBlinking();
+//     void stopBlinking();
 
-public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+// private:
+//     QPushButton *m_button;
+//     QTimer *m_timer;
+//     bool m_state;
 
-private:
-    Ui::MainWindow *ui;
-};
-#endif // MAINWINDOW_H
+//     void updateState();
+// };
 
+// #endif // LED_H
