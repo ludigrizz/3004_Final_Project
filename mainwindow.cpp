@@ -3,6 +3,7 @@
 //#include "datetimedialog.h"
 #include <QDebug>
 #include <QLabel>
+#include <QMessageBox>
 #include "deviceprofile.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -14,6 +15,12 @@ MainWindow::MainWindow(QWidget *parent)
     powerLevel = devProfile->getBatteryLevel();
     isPowerOn = false;
     togglePower();
+
+    //initialize the default battery
+    ui->battery->setStyleSheet("QProgressBar::chunk {background-color: #00ff00; width: 10px; margin: 0.5px;}");
+    ui->battery->setOrientation(Qt::Horizontal);
+    ui->battery->setRange(0,100);
+    ui->battery->setValue(99);
 // THESE COMMENTS ARE FOR REFIXING THE SLOTS AFTER SWITCHING TO STACKED WIDGETS - SOFIA
 //    connect(ui->pauseBtn, SIGNAL(released()), this, SLOT(pauseSession()));
 //    connect(ui->startBtn, SIGNAL(released()), this, SLOT(resumeSession()));
@@ -39,6 +46,96 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::treatment() {
+    qInfo("Some treatment is happening");
+    // testing needs that after 2-3 treatments the battery is empty so we remove 1/3 of the battery each time this loops
+    // ... treatment logic
+    drainBattery();
+}
+
+void MainWindow::batteryDangerNotice() {
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Caution: Low Battery","Low Battery! Your device will die soon, do you want to save, exit and charge your device?",
+                                  QMessageBox::YesToAll | QMessageBox::NoToAll| QMessageBox::Ignore);
+    if (reply == QMessageBox::YesToAll) {
+        qDebug() << "Yes was clicked";
+    }
+    if (reply == QMessageBox::NoToAll) {
+        qDebug() << "No was clicked";
+    }
+    if (reply == QMessageBox::Ignore) {
+        qDebug() << "Ignore was clicked";
+    }
+}
+
+void MainWindow::chargeBattery() {
+    int newBatteryLevel = 100;
+    qInfo("battery charged");
+    updateBattery(newBatteryLevel);
+}
+
+void MainWindow::updateBattery(int newBatteryLevel) {
+    QString low = "QProgressBar::chunk {background-color: #ff0000; width: 10px; margin: 0.5px;}";
+    QString high = "QProgressBar::chunk {background-color: #00ff00; width: 10px; margin: 0.5px;}";
+    QString medium = "QProgressBar::chunk {background-color: #ffff00; width: 10px; margin: 0.5px;}";
+
+    if (newBatteryLevel <= 0) {
+        ui->battery->setValue(0);
+        powerLevel = 0;
+        togglePower();
+        ui->battery->setStyleSheet(low);
+    } else if (newBatteryLevel > 0 && newBatteryLevel <=30) {
+        ui->battery->setValue(newBatteryLevel);
+        powerLevel = newBatteryLevel;
+        ui->battery->setStyleSheet(low);
+        batteryDangerNotice();
+    } else if (newBatteryLevel > 30 && newBatteryLevel <=60) {
+        ui->battery->setValue(newBatteryLevel);
+        ui->battery->setStyleSheet(medium);
+        powerLevel = newBatteryLevel;
+    } else if (newBatteryLevel > 60 && newBatteryLevel <=100) {
+        ui->battery->setValue(newBatteryLevel);
+        ui->battery->setStyleSheet(high);
+        powerLevel = newBatteryLevel;
+    }else if (newBatteryLevel > 100) {
+        ui->battery->setValue(100);
+        powerLevel = 100;
+        ui->battery->setStyleSheet(high);
+    }
+}
+
+void MainWindow::drainBattery() {
+    QString low = "QProgressBar::chunk {background-color: #ff0000; width: 10px; margin: 0.5px;}";
+    QString high = "QProgressBar::chunk {background-color: #00ff00; width: 10px; margin: 0.5px;}";
+    QString medium = "QProgressBar::chunk {background-color: #ffff00; width: 10px; margin: 0.5px;}";
+    int currentBatteryLevel = ui->battery->value();
+    int newBatteryLevel = currentBatteryLevel - 30;
+    if (newBatteryLevel <= 0) {
+        ui->battery->setValue(0);
+        powerLevel = 0;
+        isPowerOn = false;
+        togglePower();
+        ui->battery->setStyleSheet(low);
+    } else if (newBatteryLevel > 0 && newBatteryLevel <=30) {
+        ui->battery->setValue(newBatteryLevel);
+        powerLevel = newBatteryLevel;
+        ui->battery->setStyleSheet(low);
+        batteryDangerNotice();
+    } else if (newBatteryLevel > 30 && newBatteryLevel <=60) {
+        ui->battery->setValue(newBatteryLevel);
+        ui->battery->setStyleSheet(medium);
+        powerLevel = newBatteryLevel;
+    } else if (newBatteryLevel > 60 && newBatteryLevel <=100) {
+        ui->battery->setValue(newBatteryLevel);
+        ui->battery->setStyleSheet(high);
+        powerLevel = newBatteryLevel;
+    }else if (newBatteryLevel > 100) {
+        ui->battery->setValue(100);
+        powerLevel = 100;
+        ui->battery->setStyleSheet(high);
+    }
 }
 
 void MainWindow::toggleLED(QLabel* redLED) {
@@ -137,4 +234,5 @@ void MainWindow::on_powerBtn_released()
     }
     togglePower();
 }
+
 

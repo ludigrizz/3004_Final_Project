@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include "deviceprofile.h"
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -28,6 +29,12 @@ private:
     int powerLevel;
 
     void togglePower();
+    // battery level functions
+    void drainBattery();
+    void batteryDangerNotice();
+    void chargeBattery();
+    void updateBattery(int);
+    void treatment();
 
 private slots:
     void pauseSession();
@@ -45,5 +52,6 @@ private slots:
     void on_backBtn_3_clicked();
     void on_cancelChangeBtn_clicked();
     void on_powerBtn_released();
+
 };
 #endif // MAINWINDOW_H
