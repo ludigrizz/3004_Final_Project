@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QPushButton>
 #include <QLabel>
+#include "deviceprofile.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,15 +24,15 @@ public:
 private:
     Ui::MainWindow *ui;
     bool isPowerOn;
+    deviceProfile* devProfile;
+    int powerLevel;
+
+    void togglePower();
 
 private slots:
-    void startNewSession();
-    void getSessionLogs();
-    void openDateTimeDialog();
     void pauseSession();
     void stopSession();
     void resumeSession();
-    void togglePower();
     void toggleLED(QLabel *LED);
     void turnOnLED(QLabel *LED);
     void turnOffLED(QLabel *redLED);
@@ -43,5 +44,6 @@ private slots:
     void on_backBtn_2_clicked();
     void on_backBtn_3_clicked();
     void on_cancelChangeBtn_clicked();
+    void on_powerBtn_released();
 };
 #endif // MAINWINDOW_H

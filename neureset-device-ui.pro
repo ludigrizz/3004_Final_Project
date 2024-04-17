@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     datetimedialog.cpp \
+    deviceprofile.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -17,6 +18,7 @@ HEADERS += \
     LED.h \
     datetimedialog.h \
     deviceControl.h \
+    deviceprofile.h \
     mainwindow.h
 
 FORMS += \

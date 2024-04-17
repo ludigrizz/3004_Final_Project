@@ -3,12 +3,17 @@
 //#include "datetimedialog.h"
 #include <QDebug>
 #include <QLabel>
+#include "deviceprofile.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    devProfile = new deviceProfile(1,100.00);
+    powerLevel = devProfile->getBatteryLevel();
+    isPowerOn = false;
+    togglePower();
 // THESE COMMENTS ARE FOR REFIXING THE SLOTS AFTER SWITCHING TO STACKED WIDGETS - SOFIA
 //    connect(ui->pauseBtn, SIGNAL(released()), this, SLOT(pauseSession()));
 //    connect(ui->startBtn, SIGNAL(released()), this, SLOT(resumeSession()));
@@ -19,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent)
 //    connect(ui->dateAndTimeBtn, SIGNAL(released()), this, SLOT(openDateTimeDialog()));
 
 //    connect(ui->stopBtn, SIGNAL(released()), this, SLOT(stopSession()));
-//    connect(ui->powerBtn, SIGNAL(released()), this, SLOT(togglePower()));
 //    isPowerOn = false;
 //    ui->powerBtn->setText("Turn On");
 
@@ -55,10 +59,6 @@ void MainWindow::turnOffLED(QLabel *redLED) {
     redLED->setStyleSheet("border-radius: 12px; background-color: grey;");
 }
 
-void MainWindow::startNewSession() {
-    qInfo("user pressed new session");
-}
-
 void MainWindow::resumeSession() {
     qInfo("user pressed resume/start session");
 }
@@ -67,17 +67,13 @@ void MainWindow::pauseSession() {
     qInfo("user pressed pause session");
 }
 
-void MainWindow::getSessionLogs() {
-    qInfo("user pressed session logs");
-}
+//void MainWindow::openDateTimeDialog() {
+//    qInfo("user pressed date and time to set date and time");
+////    DateTimeDialog dialog(this);
+////    connect(&dialog, &DateTimeDialog::dateTimeSelected, this, &MainWindow::updateDateTime);
+////    dialog.exec();
 
-void MainWindow::openDateTimeDialog() {
-    qInfo("user pressed date and time to set date and time");
-//    DateTimeDialog dialog(this);
-//    connect(&dialog, &DateTimeDialog::dateTimeSelected, this, &MainWindow::updateDateTime);
-//    dialog.exec();
-
-}
+//}
 
 //void MainWindow::updateDateTime(const QDateTime &dateTime) {
 //    qDebug() << "New date and time selected: " << dateTime.toString();
@@ -87,7 +83,7 @@ void MainWindow::stopSession() {
 }
 
 void MainWindow::togglePower() {
-    qInfo("user pressed power button");
+    ui->stackedWidget->setVisible(isPowerOn);
 }
 
 
@@ -129,5 +125,16 @@ void MainWindow::on_backBtn_3_clicked()
 void MainWindow::on_cancelChangeBtn_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0); // return home
+}
+
+
+void MainWindow::on_powerBtn_released()
+{
+    if (isPowerOn == true) {
+        isPowerOn = false;
+    } else if (isPowerOn == false) {
+        isPowerOn = true;
+    }
+    togglePower();
 }
 
