@@ -2,21 +2,28 @@
 #define SESSION_H
 
 #include "electrode.h"
-#include <cstdio> 
+#include <cstdio>
 #include <vector>
 #include <QDebug>
+#include <random>
+#include <future>
 
 class Session {
 public:
-    // Constructor
-    Session(Electrode electrodes[], int size);
+   // Constructor
+   Session(Electrode electrodes[], int size);
 
-    void treatmentRound(std::vector<Electrode>& electrodes, int x);
-    void calculateDominantFrequency();
+   void treatmentRound(std::vector<Electrode>& electrodes, int offsetHz, int roundNum);
+   int calculateBaseline(std::vector<Electrode>& electrodes, int size);
+   int getOverallAverageDominantFreq() { return overallAverageDominantFreq; };
 
 
 private:
-    // Helper function to apply treatment concurrently
+   int overallAverageDominantFreq;
+   // Helper function to apply treatment concurrently
 };
 
 #endif // SESSION_H
+
+
+
