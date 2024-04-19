@@ -52,6 +52,7 @@ private:
     void setCurrentDate();
     void getCurrentDate();
 
+
 private slots:
     // session timers
     void updateSessTimer();
@@ -76,5 +77,8 @@ private slots:
     void on_startBtn_2_clicked();
     void on_dateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
     void on_confirmChangeBtn_clicked();
+    void on_redled_toggled(bool checked);
+    void on_blueled_toggled(bool checked);
+    void on_greenled_toggled(bool checked);
 };
 #endif // MAINWINDOW_H

@@ -301,7 +301,7 @@ p, li { white-space: pre-wrap; }
      <number>24</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_6">
+   <widget class="QPushButton" name="greenled">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -311,10 +311,10 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>d</string>
+     <string> </string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_5">
+   <widget class="QPushButton" name="blueled">
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -324,10 +324,10 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>b</string>
+     <string> </string>
     </property>
    </widget>
-   <widget class="QPushButton" name="redLEDos">
+   <widget class="QPushButton" name="redled">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -337,7 +337,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>t</string>
+     <string> </string>
     </property>
    </widget>
   </widget>

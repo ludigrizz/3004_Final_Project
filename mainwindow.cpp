@@ -23,11 +23,32 @@ MainWindow::MainWindow(QWidget *parent)
     devProfile = new deviceProfile(1,100.00, &d);
     powerLevel = devProfile->getBatteryLevel();
 
+    //qpushbutton styling:
+    int ledSize = 20;
+    ui->redled->setFixedSize(ledSize, ledSize);
+    ui->redled->setStyleSheet("QPushButton {background-color: grey; border-radius: 10; border: 2px solid black;}");
+    ui->greenled->setFixedSize(ledSize, ledSize);
+    ui->greenled->setStyleSheet("QPushButton {background-color: grey; border-radius: 10; border: 2px solid black;}");
+    ui->blueled->setFixedSize(ledSize, ledSize);
+    ui->blueled->setStyleSheet("QPushButton {background-color: grey; border-radius: 10; border: 2px solid black;}");
+
     // sessionTimer initialization
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateSessTimer()));
     ui->sessTimer->display(formatTime(remainingTime));
     //TBD: add ui->sessTimer->setHidden(true); => for the timeout usecase
+
+    ui->redled->setStyleSheet("background-color: grey");
+    ui->blueled->setStyleSheet("background-color: grey");
+    ui->greenled->setStyleSheet("background-color: grey");
+
+//    bool hasContact = false;
+    //SOMEFUNCTION THAT INITIALIZES THE CONTACT/STARTS SESSION WHICH MAKES...
+//    hasContact = true;
+//    on_redled_toggled(true);
+    on_blueled_toggled(true);
+    on_greenled_toggled(true);
+
 
 
 //    DigitalClock *digitalClock = new DigitalClock(ui->lcdTimer);
@@ -48,21 +69,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->battery->setOrientation(Qt::Horizontal);
     ui->battery->setRange(0,100);
     ui->battery->setValue(99);
-
-////    connect(ui->dateAndTimeBtn, &QPushButton::clicked, this, &MainWindow::openDateTimeDialog);
-//    connect(ui->dateAndTimeBtn, SIGNAL(released()), this, SLOT(openDateTimeDialog()));
-
-//    connect(ui->stopBtn, SIGNAL(released()), this, SLOT(stopSession()));
-//    isPowerOn = false;
-//    ui->powerBtn->setText("Turn On");
-
-//    QLabel *redLED = new QLabel(ui->redLEDos);
-//    redLED->setFixedSize(24,24);
-//    redLED->setStyleSheet("border-radius: 12px; background-color: red;");
-
-//    QTimer *timer = new QTimer(ui->redLEDos);
-//    connect(timer, &QTimer::timeout, this, &MainWindow::toggleLED);
-//    timer->start(500);
 
     //initialize device date/time to be current
     ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
@@ -324,5 +330,53 @@ void MainWindow::on_confirmChangeBtn_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
 
+}
+
+
+void MainWindow::on_redled_toggled(bool lostContact)
+{
+    QTimer *redTimer = new QTimer(this);
+//    QObject *redObj = ui->redled;
+
+    if (lostContact) {
+        connect(redTimer, &QTimer::timeout, [this]() {
+            static bool isOn = true;
+            ui->redled->setStyleSheet(isOn ? "background-color: red" : "background-color: grey");
+            isOn= !isOn;
+        });
+        redTimer->start(500);
+    } else {
+        timer->stop();
+        ui->redled->setStyleSheet("background-color: grey");
+    }
+}
+
+
+void MainWindow::on_blueled_toggled(bool hasContact)
+{
+    if (hasContact) {
+        ui->blueled->setStyleSheet("background-color: blue");
+    } else {
+        ui->blueled->setStyleSheet("background-color: grey");
+        on_redled_toggled(hasContact);
+    }
+}
+
+
+void MainWindow::on_greenled_toggled(bool lostContact)
+{
+    QTimer *greemTimer = new QTimer(this);
+
+    if (lostContact) {
+        connect(greemTimer, &QTimer::timeout, [this]() {
+            static bool isOn = true;
+            ui->greenled->setStyleSheet(isOn ? "background-color: green" : "background-color: grey");
+            isOn= !isOn;
+        });
+        greemTimer->start(500);
+    } else {
+        timer->stop();
+        ui->greenled->setStyleSheet("background-color: grey");
+    }
 }
 
