@@ -1,6 +1,7 @@
 #include "deviceprofile.h"
+#include <QDate>
 
-deviceProfile::deviceProfile(int deviceId, double batteryLevel)
+deviceProfile::deviceProfile(int deviceId, double batteryLevel, QDate* d)
 {
     this->deviceId = deviceId;
     this->batteryLevel = batteryLevel;
