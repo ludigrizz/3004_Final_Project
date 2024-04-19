@@ -10,6 +10,8 @@
 //#include "digitalclock.h"
 #include <QLCDNumber>
 #include <QString>
+#include <QWidget>
+#include <QDateEdit>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,6 +37,7 @@ private:
     int remainingTime;
     QTimer *sTimer;
     int powerLevel;
+    QLabel *labelDateTime;
 
     void togglePower();
     // battery level functions
@@ -65,10 +68,13 @@ private slots:
     void on_backBtn_3_clicked();
     void on_cancelChangeBtn_clicked();
     void on_powerBtn_released();
+    void displayDateTime(const QDateTime &dateTime);
 
     // pause/start controls
     void on_stopBtn_2_clicked();
     void on_pauseBtn_2_clicked();
     void on_startBtn_2_clicked();
+    void on_dateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
+    void on_confirmChangeBtn_clicked();
 };
 #endif // MAINWINDOW_H

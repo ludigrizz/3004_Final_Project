@@ -6,15 +6,17 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QPixmap>
+#include <QWidget>
 #include "deviceprofile.h"
 //#include "ledindicator.cpp"
-#include <QDateTimeEdit>
+#include <QDateEdit>
 //#include "digitalclock.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow),
-      remainingTime(60)
+      remainingTime(60),
+      labelDateTime(ui->label)
 {
     ui->setupUi(this);
     QDate d = QDate::currentDate();
@@ -46,11 +48,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->battery->setOrientation(Qt::Horizontal);
     ui->battery->setRange(0,100);
     ui->battery->setValue(99);
-// THESE COMMENTS ARE FOR REFIXING THE SLOTS AFTER SWITCHING TO STACKED WIDGETS - SOFIA
-//    connect(ui->pauseBtn, SIGNAL(released()), this, SLOT(pauseSession()));
-//    connect(ui->startBtn, SIGNAL(released()), this, SLOT(resumeSession()));
-//    connect(ui->newSessionBtn, SIGNAL(released()), this, SLOT(startNewSession()));
-//    connect(ui->sessionLogBtn, SIGNAL(released()), this, SLOT(getSessionLogs()));
 
 ////    connect(ui->dateAndTimeBtn, &QPushButton::clicked, this, &MainWindow::openDateTimeDialog);
 //    connect(ui->dateAndTimeBtn, SIGNAL(released()), this, SLOT(openDateTimeDialog()));
@@ -66,6 +63,12 @@ MainWindow::MainWindow(QWidget *parent)
 //    QTimer *timer = new QTimer(ui->redLEDos);
 //    connect(timer, &QTimer::timeout, this, &MainWindow::toggleLED);
 //    timer->start(500);
+
+    //initialize device date/time to be current
+    ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
+    connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, this, &MainWindow::on_dateTimeEdit_dateTimeChanged);
+    connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, this, &MainWindow::displayDateTime);
+
 }
 
 MainWindow::~MainWindow()
@@ -217,11 +220,8 @@ void MainWindow::updateSessTimer() {
 
 //}
 
-//void MainWindow::updateDateTime(const QDateTime &dateTime) {
+//void MainWindow::(const QDateTime &dateTime) {
 //    qDebug() << "New date and time selected: " << dateTime.toString();
-//}
-//void MainWindow::stopSession() {
-//    qInfo("user pressed stop session");
 //}
 
 void MainWindow::togglePower() {
@@ -301,5 +301,28 @@ void MainWindow::on_startBtn_2_clicked()
 {
     qInfo("start");
     timer->start(1000);
+}
+
+void MainWindow::displayDateTime(const QDateTime &dateTime) {
+    QString formattedStrDateTime = dateTime.toString("yyyy-MM-dd HH:mm:ss");
+    qDebug() << "User changed date/time to: " << formattedStrDateTime;
+    ui->label->setText("Date/Time Set: " + formattedStrDateTime);
+}
+
+
+void MainWindow::on_dateTimeEdit_dateTimeChanged(const QDateTime &newDateTime)
+{
+    qDebug() << "User changed date/time to: " << newDateTime.toString("yyyy-MM-dd HH:mm:ss");
+    // this should probably be stored to something to be added to the sessionInfo/ sessiontxt file
+    // to view later via the session Log or PC log
+    displayDateTime(newDateTime);
+
+}
+
+
+void MainWindow::on_confirmChangeBtn_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+
 }
 
