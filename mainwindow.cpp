@@ -4,17 +4,42 @@
 #include <QDebug>
 #include <QLabel>
 #include <QMessageBox>
+#include <QPainter>
+#include <QPixmap>
 #include "deviceprofile.h"
+//#include "ledindicator.cpp"
+#include <QDateTimeEdit>
+//#include "digitalclock.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow),
+      remainingTime(60)
 {
     ui->setupUi(this);
-    devProfile = new deviceProfile(1,100.00);
+    QDate d = QDate::currentDate();
+    devProfile = new deviceProfile(1,100.00, &d);
     powerLevel = devProfile->getBatteryLevel();
+
+    // sessionTimer initialization
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateSessTimer()));
+    ui->sessTimer->display(formatTime(remainingTime));
+    //TBD: add ui->sessTimer->setHidden(true); => for the timeout usecase
+
+
+//    DigitalClock *digitalClock = new DigitalClock(ui->lcdTimer);
+
+//    connect(ui->lcdTimer, SIGNAL)
+    setCurrentDate();
+//    LedIndicator *ledIndicator = new LedIndicator(this);
+
+//    setCentralWidget(ledIndicator);
     isPowerOn = false;
     togglePower();
+
+//    ledIndicator->changeToRed();
+
 
     //initialize the default battery
     ui->battery->setStyleSheet("QProgressBar::chunk {background-color: #00ff00; width: 10px; margin: 0.5px;}");
@@ -48,6 +73,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::getCurrentDate() {
+    ui->dateTimeEdit->dateTime();
+
+}
+
+void MainWindow::setCurrentDate() {
+    QDate date = QDate::currentDate();
+    QString dateString = date.toString();
+    ui->dateTimeEdit->setDate(date);
+    qDebug() << "Date String: " << dateString;
+}
 void MainWindow::treatment() {
     qInfo("Some treatment is happening");
     // testing needs that after 2-3 treatments the battery is empty so we remove 1/3 of the battery each time this loops
@@ -85,7 +121,7 @@ void MainWindow::updateBattery(int newBatteryLevel) {
         ui->battery->setValue(0);
         powerLevel = 0;
         togglePower();
-        ui->battery->setStyleSheet(low);
+         ui->battery->setStyleSheet(low);
     } else if (newBatteryLevel > 0 && newBatteryLevel <=30) {
         ui->battery->setValue(newBatteryLevel);
         powerLevel = newBatteryLevel;
@@ -156,12 +192,21 @@ void MainWindow::turnOffLED(QLabel *redLED) {
     redLED->setStyleSheet("border-radius: 12px; background-color: grey;");
 }
 
-void MainWindow::resumeSession() {
-    qInfo("user pressed resume/start session");
+QString MainWindow::formatTime(int totalSeconds) {
+    int mins = totalSeconds/60;
+    int secs =totalSeconds%60;
+    return QString("%1:%2").arg(mins,2,10,QChar('0')).arg(secs,2,10,QChar('0'));
 }
 
-void MainWindow::pauseSession() {
-    qInfo("user pressed pause session");
+
+
+void MainWindow::updateSessTimer() {
+    if (remainingTime>0) {
+        remainingTime--;
+        ui->sessTimer->display(formatTime(remainingTime));
+    } else{
+        on_stopBtn_2_clicked();
+    }
 }
 
 //void MainWindow::openDateTimeDialog() {
@@ -175,9 +220,9 @@ void MainWindow::pauseSession() {
 //void MainWindow::updateDateTime(const QDateTime &dateTime) {
 //    qDebug() << "New date and time selected: " << dateTime.toString();
 //}
-void MainWindow::stopSession() {
-    qInfo("user pressed stop session");
-}
+//void MainWindow::stopSession() {
+//    qInfo("user pressed stop session");
+//}
 
 void MainWindow::togglePower() {
     ui->stackedWidget->setVisible(isPowerOn);
@@ -235,4 +280,26 @@ void MainWindow::on_powerBtn_released()
     togglePower();
 }
 
+
+
+void MainWindow::on_stopBtn_2_clicked()
+{
+    qInfo("stOP");
+    timer->stop();
+    remainingTime = 60;
+    ui->sessTimer->display(formatTime(remainingTime));
+}
+
+
+void MainWindow::on_pauseBtn_2_clicked()
+{
+    qInfo("pause");
+    timer->stop();
+}
+
+void MainWindow::on_startBtn_2_clicked()
+{
+    qInfo("start");
+    timer->start(1000);
+}
 

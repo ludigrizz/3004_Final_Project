@@ -7,6 +7,9 @@
 #include <QLabel>
 #include "deviceprofile.h"
 #include <QMessageBox>
+//#include "digitalclock.h"
+#include <QLCDNumber>
+#include <QString>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,6 +29,11 @@ private:
     Ui::MainWindow *ui;
     bool isPowerOn;
     deviceProfile* devProfile;
+//    DigitalClock* sessionClock; -> alternate i tried bc i thought i was being slick about states but i wasnt lol
+//    DigitalClock* connectionClock();
+    QString formatTime(int totalSeconds);
+    int remainingTime;
+    QTimer *sTimer;
     int powerLevel;
 
     void togglePower();
@@ -36,10 +44,15 @@ private:
     void updateBattery(int);
     void treatment();
 
+    //date/time
+    void setNewDate();
+    void setCurrentDate();
+    void getCurrentDate();
+
 private slots:
-    void pauseSession();
-    void stopSession();
-    void resumeSession();
+    // session timers
+    void updateSessTimer();
+
     void toggleLED(QLabel *LED);
     void turnOnLED(QLabel *LED);
     void turnOffLED(QLabel *redLED);
@@ -53,5 +66,9 @@ private slots:
     void on_cancelChangeBtn_clicked();
     void on_powerBtn_released();
 
+    // pause/start controls
+    void on_stopBtn_2_clicked();
+    void on_pauseBtn_2_clicked();
+    void on_startBtn_2_clicked();
 };
 #endif // MAINWINDOW_H
