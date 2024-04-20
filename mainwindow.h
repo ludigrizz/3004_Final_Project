@@ -12,6 +12,10 @@
 #include <QString>
 #include <QWidget>
 #include <QDateEdit>
+#include <qcustomplot.h>
+#include "graph.h"
+#include "session.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,6 +30,7 @@ public:
     ~MainWindow();
     QTimer *timer;
     QLabel *redLED;
+    int MAX_TIME=90;
 
 private:
     Ui::MainWindow *ui;
@@ -38,6 +43,8 @@ private:
     QTimer *sTimer;
     int powerLevel;
     QLabel *labelDateTime;
+    Graph *graph;
+    Session *session;
 
     void togglePower();
     // battery level functions
@@ -51,6 +58,8 @@ private:
     void setNewDate();
     void setCurrentDate();
     void getCurrentDate();
+    void initializeGraph();
+    //void clearGraph();
 
 
 private slots:

@@ -10,13 +10,14 @@
 #include "deviceprofile.h"
 //#include "ledindicator.cpp"
 #include <QDateEdit>
-//#include "digitalclock.h"
+#include "digitalclock.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow),
-      remainingTime(60),
-      labelDateTime(ui->label)
+    : QMainWindow(parent),
+      ui(new Ui::MainWindow),
+      remainingTime(MAX_TIME),
+      labelDateTime(ui->label),
+      graph(0)
 {
     ui->setupUi(this);
     QDate d = QDate::currentDate();
@@ -42,26 +43,27 @@ MainWindow::MainWindow(QWidget *parent)
     ui->blueled->setStyleSheet("background-color: grey");
     ui->greenled->setStyleSheet("background-color: grey");
 
-//    bool hasContact = false;
+
+    //    bool hasContact = false;
     //SOMEFUNCTION THAT INITIALIZES THE CONTACT/STARTS SESSION WHICH MAKES...
-//    hasContact = true;
-//    on_redled_toggled(true);
+    //    hasContact = true;
+    //    on_redled_toggled(true);
     on_blueled_toggled(true);
     on_greenled_toggled(true);
 
 
 
-//    DigitalClock *digitalClock = new DigitalClock(ui->lcdTimer);
+    //    DigitalClock *digitalClock = new DigitalClock(ui->lcdTimer);
 
-//    connect(ui->lcdTimer, SIGNAL)
+    //    connect(ui->lcdTimer, SIGNAL)
     setCurrentDate();
-//    LedIndicator *ledIndicator = new LedIndicator(this);
+    //    LedIndicator *ledIndicator = new LedIndicator(this);
 
-//    setCentralWidget(ledIndicator);
+    //    setCentralWidget(ledIndicator);
     isPowerOn = false;
     togglePower();
 
-//    ledIndicator->changeToRed();
+    //    ledIndicator->changeToRed();
 
 
     //initialize the default battery
@@ -75,11 +77,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, this, &MainWindow::on_dateTimeEdit_dateTimeChanged);
     connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, this, &MainWindow::displayDateTime);
 
+    ui->stackedWidget->setCurrentIndex(0); //makes sure its always on menu screen
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
 }
 
 void MainWindow::getCurrentDate() {
@@ -95,7 +97,7 @@ void MainWindow::setCurrentDate() {
 }
 void MainWindow::treatment() {
     qInfo("Some treatment is happening");
-    // testing needs that after 2-3 treatments the battery is empty so we remove 1/3 of the battery each time this loops
+    // TO DO: testing needs that after 2-3 treatments the battery is empty so we remove 1/3 of the battery each time this loops
     // ... treatment logic
     drainBattery();
 }
@@ -130,7 +132,7 @@ void MainWindow::updateBattery(int newBatteryLevel) {
         ui->battery->setValue(0);
         powerLevel = 0;
         togglePower();
-         ui->battery->setStyleSheet(low);
+        ui->battery->setStyleSheet(low);
     } else if (newBatteryLevel > 0 && newBatteryLevel <=30) {
         ui->battery->setValue(newBatteryLevel);
         powerLevel = newBatteryLevel;
@@ -210,9 +212,58 @@ QString MainWindow::formatTime(int totalSeconds) {
 
 
 void MainWindow::updateSessTimer() {
+    qDebug() << "remainging:" << remainingTime;
     if (remainingTime>0) {
         remainingTime--;
         ui->sessTimer->display(formatTime(remainingTime));
+
+        // get remaining time
+        int rtime = timer->remainingTime();
+
+        qDebug() << "updatesession.." << rtime;
+
+        int currtime = MAX_TIME-remainingTime;
+
+        /* calculating dominant frequency, delivering 1-second feedback at
+         * 1/16 of dominant + offset, rounds of therapy, and therapy */
+
+        if (remainingTime == 30) {
+            session->treatmentRound(5, 1);
+            graph->updateGraph(currtime, 150);
+
+        } else if (remainingTime == 25) {
+            int freq = session->getDominantFrequency(0);
+            graph->updateGraph(currtime, freq);
+
+        } else if (remainingTime == 24) {
+            session->treatmentRound(10, 2);
+            graph->updateGraph(currtime, 150);
+
+        } else if (remainingTime == 19) {
+            int freq = session->getDominantFrequency(0);
+            graph->updateGraph(currtime, freq);
+
+        } else if (remainingTime == 18) {
+            session->treatmentRound(15, 3);
+
+            graph->updateGraph(currtime, 150);
+        } else if (remainingTime == 13) {
+            int freq = session->getDominantFrequency(0);
+            graph->updateGraph(currtime, freq);
+
+        } else if (remainingTime == 12) {
+            session->treatmentRound(20, 4);
+            graph->updateGraph(currtime, 150);
+
+        } else if (remainingTime == 7) {
+            int freq = session->getDominantFrequency(0);
+            graph->updateGraph(currtime, freq);
+
+        } else {
+            int freq = session->getFrequency(0, currtime);
+            graph->updateGraph(currtime, freq);
+        }
+
     } else{
         on_stopBtn_2_clicked();
     }
@@ -231,7 +282,9 @@ void MainWindow::updateSessTimer() {
 //}
 
 void MainWindow::togglePower() {
-    ui->stackedWidget->setVisible(isPowerOn);
+    //ui->stackedWidget->setVisible(isPowerOn);
+    isPowerOn = !isPowerOn; // Toggle the power state
+    ui->stackedWidget->setVisible(isPowerOn); // Existing functionality
 }
 
 
@@ -247,7 +300,42 @@ void MainWindow::on_sessionLogBtn_clicked()
 
 void MainWindow::on_newSessionBtn_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(3); // go to new session view
+    ui->stackedWidget->setCurrentIndex(3);
+    // go to new session view
+    qDebug() << "Starting new session..."<< isPowerOn ;
+    if (isPowerOn) {
+        initializeGraph();
+
+        //Same waves
+        Wave alpha(9, 2, "alpha");
+        Wave beta(15, 2, "beta");
+        Wave delta(2, 2, "delta");
+        Wave theta(4, 2, "theta");
+
+        Wave alpha2(10, 2, "alpha");
+        Wave beta2(14, 2, "beta");
+        Wave delta2(1, 2, "delta");
+        Wave theta2(5, 2, "theta");
+
+
+        // Define sample electrodes
+        Electrode electrodes[] = {
+            Electrode(alpha, beta, delta, theta),
+            Electrode(alpha, beta, delta, theta),
+            Electrode(alpha, beta, delta, theta),
+            Electrode(alpha, beta, delta, theta),
+            Electrode(alpha2, beta2, delta2, theta2)// Sample electrode 1
+            //        {15, 25, 35, 45, 55, 65, 75, 85}, // Sample electrode 2
+            // Add more sample electrodes as needed
+        };
+        int numElectrodes = sizeof(electrodes) / sizeof(electrodes[0]);
+
+        //    Electrode [] *elctrodesPtr = &
+
+        // Create a session object
+        session = new Session(electrodes, numElectrodes);
+
+    }
 }
 
 
@@ -306,7 +394,8 @@ void MainWindow::on_pauseBtn_2_clicked()
 void MainWindow::on_startBtn_2_clicked()
 {
     qInfo("start");
-    timer->start(1000);
+
+    timer->start(1000); // 1.30 min
 }
 
 void MainWindow::displayDateTime(const QDateTime &dateTime) {
@@ -336,7 +425,7 @@ void MainWindow::on_confirmChangeBtn_clicked()
 void MainWindow::on_redled_toggled(bool lostContact)
 {
     QTimer *redTimer = new QTimer(this);
-//    QObject *redObj = ui->redled;
+    //    QObject *redObj = ui->redled;
 
     if (lostContact) {
         connect(redTimer, &QTimer::timeout, [this]() {
@@ -380,3 +469,32 @@ void MainWindow::on_greenled_toggled(bool lostContact)
     }
 }
 
+
+void MainWindow::initializeGraph() {
+    if (!graph) {  // Ensure graph is only initialized once
+        // Check if the customPlot widget from the UI file is correctly initialized
+        if (!ui->customPlot) {
+            qWarning() << "CustomPlot widget is not initialized!";
+            return;
+        }
+
+        // Create the Graph object using the customPlot widget
+        graph = new Graph(ui->customPlot, this);
+
+        // Check if the Graph object was created successfully
+        if (!graph) {
+            qWarning() << "Failed to create Graph object!";
+            return;
+        }
+    } else {
+        qDebug() << "Graph is already initialized.";
+    }
+
+}
+//void MainWindow::clearGraph() {
+//    if (graph) {
+//        // Depending on your design, you might delete the graph or simply hide it
+//       // graph->clearData(); // You might need to implement this method in your Graph class
+//        graph->setVisible(false);
+//    }
+//}

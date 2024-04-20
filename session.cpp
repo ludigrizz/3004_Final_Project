@@ -1,24 +1,32 @@
 #include "session.h"
 
 Session::Session(Electrode electrodes[], int size) {
-   // Convert array to vector for flexibility
-   std::vector<Electrode> electrodesVec(electrodes, electrodes + size);
 
-   qDebug().nospace() << "Overall average dominant frequency (DRF) at start of session is " << calculateBaseline(electrodesVec, size);
+    electrodesVec1.reserve(size);
+
+     //Convert array to vector for flexibility
+     for (int i = 0; i < size; ++i) {
+         electrodesVec1.append(electrodes[i]);
+     }
+
+   // Convert array to vector for flexibility
+   std::vector<Electrode> electrodesVec(electrodes, electrodes + size); //c: unused
+
+  // qDebug().nospace() << "Overall average dominant frequency (DRF) at start of session is " << calculateBaseline(electrodesVec, size);
 
    // Apply treatment concurrently
-   treatmentRound(electrodesVec, 5, 1);
-   treatmentRound(electrodesVec, 10, 2);
-   treatmentRound(electrodesVec, 15, 3);
-   treatmentRound(electrodesVec, 20, 4);
+//   treatmentRound(electrodesVec, 5, 1);
+//   treatmentRound(electrodesVec, 10, 2);
+//   treatmentRound(electrodesVec, 15, 3);
+//   treatmentRound(electrodesVec, 20, 4);
 
-   qDebug().nospace() << "Overall average dominant frequency (DRF) at end of session is " << calculateBaseline(electrodesVec, size);
+   //qDebug().nospace() << "Overall average dominant frequency (DRF) at end of session is " << calculateBaseline(electrodesVec, size);
 
 
 
 }
 
-void Session::treatmentRound(std::vector<Electrode>& electrodes, int offsetHz, int roundNum) {
+void Session::treatmentRound(int offsetHz, int roundNum) {
    qDebug().nospace() << "***Start of Round " << roundNum << "***";
    qDebug().nospace() << "Applying Treatment... ";
 
@@ -29,7 +37,7 @@ void Session::treatmentRound(std::vector<Electrode>& electrodes, int offsetHz, i
 
    // Create threads for each electrode
    std::vector<std::thread> treatmentThreads;
-   for (auto& electrode : electrodes) {
+   for (auto& electrode : electrodesVec1) {
        treatmentThreads.emplace_back(treatmentFunc, std::ref(electrode));
    }
 
@@ -48,7 +56,7 @@ void Session::treatmentRound(std::vector<Electrode>& electrodes, int offsetHz, i
    };
 
    std::vector<std::thread> frequencyThreads;
-   for (auto& electrode : electrodes) {
+   for (auto& electrode : electrodesVec1) {
        frequencyThreads.emplace_back(getFrequencyFunc, std::ref(electrode));
    };
 
@@ -59,6 +67,9 @@ void Session::treatmentRound(std::vector<Electrode>& electrodes, int offsetHz, i
 
    qDebug().nospace() << "***End of " << roundNum << "***";
 }
+
+
+/* c: unused function below*/
 
 int Session::calculateBaseline(std::vector<Electrode>& electrodesVec, int size) {
    // Vector to hold futures for each electrode calculation
@@ -88,6 +99,13 @@ int Session::calculateBaseline(std::vector<Electrode>& electrodesVec, int size) 
 }
 
 
+int Session::getFrequency(int index, int time) {
+    return electrodesVec1.at(index).getFrequency(time);
+}
+
+int Session::getDominantFrequency(int index) {
+    return electrodesVec1.at(index).getDominantFrequency();
+}
 
 
 

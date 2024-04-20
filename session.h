@@ -13,14 +13,18 @@ public:
    // Constructor
    Session(Electrode electrodes[], int size);
 
-   void treatmentRound(std::vector<Electrode>& electrodes, int offsetHz, int roundNum);
-   int calculateBaseline(std::vector<Electrode>& electrodes, int size);
+   void treatmentRound(int offsetHz, int roundNum);
+   int calculateBaseline(std::vector<Electrode>& electrodes, int size); // c: unused
    int getOverallAverageDominantFreq() { return overallAverageDominantFreq; };
+   int getFrequency(int, int);
+   int getDominantFrequency(int);
+
 
 
 private:
    int overallAverageDominantFreq;
    // Helper function to apply treatment concurrently
+   QVector<Electrode>electrodesVec1;
 };
 
 #endif // SESSION_H

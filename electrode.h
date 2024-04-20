@@ -19,6 +19,7 @@ public:
    // Getter
    int getDominantFrequency() const;
    void setDominantFrequency(int newDomFreq);
+   int getFrequency(int) const;
 
 private:
    int dominantFrequency;

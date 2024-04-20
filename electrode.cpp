@@ -1,4 +1,6 @@
 #include "electrode.h"
+#include <QRandomGenerator>
+#include <QDebug>
 
 //int Electrode::dominantFrequency = 0;
 
@@ -70,5 +72,13 @@ void Electrode::setDominantFrequency(int newDomFreq) {
    dominantFrequency = newDomFreq;
 }
 
+/* generating random data for graph */
+int Electrode::getFrequency(int time) const {
+    int randomNumber = QRandomGenerator::global()->bounded(-150,150);
+
+    qDebug() << "Random number between 1 and 30:" << randomNumber;
+
+    return randomNumber;
+}
 
 

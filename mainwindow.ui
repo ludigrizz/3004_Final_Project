@@ -70,7 +70,7 @@ p, li { white-space: pre-wrap; }
      <string notr="true">background-color: rgb(135,206,250);</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QPushButton" name="sessionLogBtn">
@@ -258,10 +258,20 @@ p, li { white-space: pre-wrap; }
      <widget class="QLCDNumber" name="sessTimer">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>50</y>
-        <width>251</width>
-        <height>61</height>
+        <x>100</x>
+        <y>20</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QCustomPlot" name="customPlot" native="true">
+      <property name="geometry">
+       <rect>
+        <x>39</x>
+        <y>69</y>
+        <width>261</width>
+        <height>131</height>
        </rect>
       </property>
      </widget>
@@ -311,7 +321,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="blueled">
@@ -324,7 +334,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="redled">
@@ -337,7 +347,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
     </property>
    </widget>
   </widget>
@@ -353,6 +363,14 @@ p, li { white-space: pre-wrap; }
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
