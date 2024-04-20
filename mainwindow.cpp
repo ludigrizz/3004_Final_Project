@@ -73,19 +73,15 @@ MainWindow::MainWindow(QWidget *parent)
    ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
    connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, this, &MainWindow::on_dateTimeEdit_dateTimeChanged);
    connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, this, &MainWindow::displayDateTime);
-   // New Session
-//    connect(activeSession, &Session::sessionStarted, this, &MainWindow::on_startBtn_2_clicked);
-//    connect(ui->startBtn_2, &QPushButton::clicked, activeSession, &Session::startSession);
-//    connect(activeSession, &Session::treatmentStarted, this, &MainWindow::toggleBlueLightOn);
-//    connect(activeSession, &Session::sessionStarted, this, &MainWindow::on_blueled_toggled);
-
-
 
    // sessionTimer initialization
    timer = new QTimer(this);
    connect(timer, SIGNAL(timeout()), this, SLOT(updateSessTimer()));
    ui->sessTimer->display(formatTime(remainingTime));
    //TBD: add ui->sessTimer->setHidden(true); => for the timeout usecase
+
+   connect(ui->pauseBtn_2, &QPushButton::clicked, activeSession, &Session::pauseResumeSession);
+   connect(activeSession, &Session::sessionPaused, this, &MainWindow::updateUIOnPause);
 }
 
 MainWindow::~MainWindow()
@@ -93,6 +89,12 @@ MainWindow::~MainWindow()
    delete ui;
    delete timer;
    delete activeSession;
+}
+
+void MainWindow::updateUIOnPause() {
+   toggleBlueLightOn();
+   ui->greenled->setStyleSheet("background-color: grey");
+
 }
 
 void MainWindow::getCurrentDate() {
@@ -316,6 +318,8 @@ void MainWindow::on_powerBtn_released()
 
 void MainWindow::on_stopBtn_2_clicked()
 {
+   connect(activeSession, &Session::sessionEnded, this,&MainWindow::onSessionEnded);
+
    qInfo("stOP");
    timer->stop();
    remainingTime = 60;
@@ -327,56 +331,73 @@ void MainWindow::on_pauseBtn_2_clicked()
 {
    qInfo("pause");
    timer->stop();
-//    if (activeSession->getPaused()) {
-//        activeSession->resume();
-//    }
-//    activeSession->pause();
+
+   connect(activeSession, &Session::sessionPaused, this, &MainWindow::onSessionStarted);
 }
 
 void MainWindow::on_startBtn_2_clicked()
 {
+   if (activeSession) {
+       qWarning() << "alr active session, please stop or pause current session";
+       return;
+   }
 
-   on_blueled_toggled(true);
-//    if (!activeSession) {
-//        qInfo("start");
-//        timer->start(1000);
-//        //new Session
-//        Wave alpha(9, 2, "alpha");
-//        Wave beta(15, 2, "beta");
-//        Wave delta(2, 2, "delta");
-//        Wave theta(4, 2, "theta");
+   qInfo("start");
+   timer->start(1000);
+   //new Session
+   Wave alpha(9, 2, "alpha");
+   Wave beta(15, 2, "beta");
+   Wave delta(2, 2, "delta");
+   Wave theta(4, 2, "theta");
 
-//        Wave alpha2(10, 2, "alpha");
-//        Wave beta2(14, 2, "beta");
-//        Wave delta2(1, 2, "delta");
-//        Wave theta2(5, 2, "theta");
+   // Define sample electrodes
+   Electrode electrodes[] = {
+       Electrode(alpha, beta, delta, theta),
+       Electrode(alpha, beta, delta, theta),
+       Electrode(alpha, beta, delta, theta),
+       Electrode(alpha, beta, delta, theta),
+       Electrode(alpha, beta, delta, theta)
+   };
+   int numElectrodes = sizeof(electrodes) / sizeof(electrodes[0]);
 
+   // Create a session object
+   activeSession = new Session(electrodes, numElectrodes);
 
-//        // Define sample electrodes
-//        Electrode electrodes[] = {
-//            Electrode(alpha, beta, delta, theta),
-//            Electrode(alpha, beta, delta, theta),
-//            Electrode(alpha, beta, delta, theta),
-//            Electrode(alpha, beta, delta, theta),
-//            Electrode(alpha2, beta2, delta2, theta2)
-//        };
-//        int numElectrodes = sizeof(electrodes) / sizeof(electrodes[0]);
-
-//        // Create a session object
-//        activeSession = new Session(electrodes, numElectrodes);
-
-////        on_greenled_toggled(false);
-//        connect(activeSession, &Session::sessionStarted, this, [this]() { on_blueled_toggled(true); });
-////        connect(activeSession, &Session::treatmentStarted, this, [this]() { on_greenled_toggled(false); });
-////        connect(activeSession, &Session::treatmentPaused, this,[this]() { on_pauseBtn_2_clicked(); });
+//        on_greenled_toggled(false);
+   connect(activeSession, &Session::sessionStarted, this, &MainWindow::onSessionStarted);
+   connect(activeSession, &Session::treatmentAdministering, this, &MainWindow::updateUIforTreatment);
+   connect(activeSession, &Session::treatmentAdministrationDone, this, &MainWindow::updateUIforTreatment2);
+//    connect(activeSession, &Session::sessionEnded, this,&MainWindow::onSessionEnded);
 
 
-//        activeSession->startSession();
-//    } else {
-
-//    }
+   qDebug() << "Session started!";
+   activeSession->startSession();
 
 }
+
+void MainWindow::onSessionStarted() {
+   qDebug() << "Session officially started";
+   toggleBlueLightOn();
+}
+
+void MainWindow::updateUIforTreatment() {
+   ui->greenled->setStyleSheet("background-color: green");
+}
+
+void MainWindow::updateUIforTreatment2() {
+   ui->greenled->setStyleSheet("background-color: grey");
+}
+
+void MainWindow::onSessionEnded() {
+   qInfo() << "Session ended";
+   toggleBlueLightOff();
+   if (activeSession) {
+       disconnect(activeSession, nullptr, this, nullptr);
+       delete activeSession;
+       activeSession = nullptr;
+   }
+}
+
 
 void MainWindow::displayDateTime(const QDateTime &dateTime) {
    QString formattedStrDateTime = dateTime.toString("yyyy-MM-dd HH:mm:ss");
@@ -425,6 +446,11 @@ void MainWindow::toggleBlueLightOn() {
    ui->blueled->setStyleSheet("background-color: blue");
 }
 
+void MainWindow::toggleBlueLightOff() {
+   qDebug() <<"Blue light toggled off";
+   ui->blueled->setStyleSheet("background-color: grey");
+}
+
 void MainWindow::on_blueled_toggled(bool hasContact)
 {
    if (hasContact) {
@@ -458,7 +484,3 @@ void MainWindow::on_greenled_toggled(bool lostContact)
        ui->greenled->setStyleSheet("background-color: grey");
    }
 }
-
-
-
-

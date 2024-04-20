@@ -84,8 +84,16 @@ private slots:
    void on_redled_toggled(bool checked);
    void on_blueled_toggled(bool checked);
    void on_greenled_toggled(bool checked);
+   void onSessionStarted();
+//    void onSessionPaused();
+   void updateUIforTreatment();
+
+   void updateUIforTreatment2();
+   void updateUIOnPause();
+   void onSessionEnded();
 
    void toggleBlueLightOn();
+   void toggleBlueLightOff();
 };
 #endif // MAINWINDOW_H
 
