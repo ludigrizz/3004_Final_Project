@@ -12,7 +12,8 @@
 #include <QString>
 #include <QWidget>
 #include <QDateEdit>
-
+#include <QListWidget>
+//#include "pcwindow.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -38,6 +39,8 @@ private:
     QTimer *sTimer;
     int powerLevel;
     QLabel *labelDateTime;
+    QString selectedSession;
+//    pcwindow *pcwindow;
 
     void togglePower();
     // battery level functions
@@ -51,6 +54,10 @@ private:
     void setNewDate();
     void setCurrentDate();
     void getCurrentDate();
+
+    // session logs
+    void addSessionLog(QListWidget *listWidget, const QString &sessEntry);
+    void addSessionLogs(QListWidget *listWidget, const QStringList &sessEntries);
 
 
 private slots:
@@ -80,5 +87,7 @@ private slots:
     void on_redled_toggled(bool checked);
     void on_blueled_toggled(bool checked);
     void on_greenled_toggled(bool checked);
+    void on_listWidget_2_itemClicked(QListWidgetItem *item);
+    void on_uploadSessBtn_clicked();
 };
 #endif // MAINWINDOW_H

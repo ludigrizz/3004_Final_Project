@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>433</width>
+    <width>978</width>
     <height>660</height>
    </rect>
   </property>
@@ -70,7 +70,7 @@ p, li { white-space: pre-wrap; }
      <string notr="true">background-color: rgb(135,206,250);</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QPushButton" name="sessionLogBtn">
@@ -191,7 +191,7 @@ p, li { white-space: pre-wrap; }
        <string>&lt;-</string>
       </property>
      </widget>
-     <widget class="QListView" name="listView_2">
+     <widget class="QListWidget" name="listWidget_2">
       <property name="geometry">
        <rect>
         <x>30</x>
@@ -199,6 +199,19 @@ p, li { white-space: pre-wrap; }
         <width>261</width>
         <height>161</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="uploadSessBtn">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>230</y>
+        <width>83</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Upload</string>
       </property>
      </widget>
     </widget>
@@ -311,7 +324,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="blueled">
@@ -324,7 +337,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="redled">
@@ -337,7 +350,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
     </property>
    </widget>
   </widget>
@@ -346,7 +359,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>433</width>
+     <width>978</width>
      <height>22</height>
     </rect>
    </property>

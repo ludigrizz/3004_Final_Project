@@ -14,7 +14,8 @@ SOURCES += \
     digitalclock.cpp \
     ledindicator.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    pcwindow.cpp
 
 HEADERS += \
     LED.h \
@@ -23,10 +24,12 @@ HEADERS += \
     deviceprofile.h \
     digitalclock.h \
     ledindicator.h \
-    mainwindow.h
+    mainwindow.h \
+    pcwindow.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    pcwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
