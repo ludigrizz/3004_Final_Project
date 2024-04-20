@@ -14,26 +14,29 @@
 #include <QDateEdit>
 #include <QListWidget>
 //#include "pcwindow.h"
+#include <session.h>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+   Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-    QTimer *timer;
-    QLabel *redLED;
+   MainWindow(QWidget *parent = nullptr);
+   ~MainWindow();
+   QTimer *timer;
+   QLabel *redLED;
 
 private:
-    Ui::MainWindow *ui;
-    bool isPowerOn;
-    deviceProfile* devProfile;
+   Ui::MainWindow *ui;
+   bool isPowerOn;
+   deviceProfile* devProfile;
 //    DigitalClock* sessionClock; -> alternate i tried bc i thought i was being slick about states but i wasnt lol
 //    DigitalClock* connectionClock();
+
     QString formatTime(int totalSeconds);
     int remainingTime;
     QTimer *sTimer;
@@ -55,19 +58,23 @@ private:
     void setCurrentDate();
     void getCurrentDate();
 
+   //active session
+   Session *activeSession;
+
     // session logs
     void addSessionLog(QListWidget *listWidget, const QString &sessEntry);
     void addSessionLogs(QListWidget *listWidget, const QStringList &sessEntries);
 
 
 private slots:
-    // session timers
-    void updateSessTimer();
+   // session timers
+   void updateSessTimer();
 
-    void toggleLED(QLabel *LED);
-    void turnOnLED(QLabel *LED);
-    void turnOffLED(QLabel *redLED);
+   void toggleLED(QLabel *LED);
+   void turnOnLED(QLabel *LED);
+   void turnOffLED(QLabel *redLED);
 //    void updateDateTime(const QDateTime &dateTime);
+
     void on_newSessionBtn_clicked();
     void on_sessionLogBtn_clicked();
     void on_dateAndTimeBtn_clicked();
@@ -89,5 +96,10 @@ private slots:
     void on_greenled_toggled(bool checked);
     void on_listWidget_2_itemClicked(QListWidgetItem *item);
     void on_uploadSessBtn_clicked();
+    void toggleBlueLightOn();
+
 };
 #endif // MAINWINDOW_H
+
+
+
