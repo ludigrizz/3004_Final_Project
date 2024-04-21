@@ -1,4 +1,6 @@
 #include "electrode.h"
+#include <QRandomGenerator>
+#include <QDebug>
 
 //int Electrode::dominantFrequency = 0;
 
@@ -13,9 +15,9 @@ void Electrode::calculateDominantFrequency() {
 //    qDebug().nospace() << "DOM" << dominantFrequency;
    std::this_thread::sleep_for(std::chrono::seconds(5));
 
-   dominantFrequency = (alphaFreq * pow(alphaAmp, 2) + betaFreq * pow(betaAmp, 2) +
+   dominantFrequency.append((alphaFreq * pow(alphaAmp, 2) + betaFreq * pow(betaAmp, 2) +
                         deltaFreq * pow(deltaAmp, 2) + thetaFreq * pow(thetaAmp, 2)) /
-                       (pow(alphaAmp, 2) + pow(betaAmp, 2) + pow(deltaAmp, 2) + pow(thetaAmp, 2));
+                       (pow(alphaAmp, 2) + pow(betaAmp, 2) + pow(deltaAmp, 2) + pow(thetaAmp, 2)));
 
 //    qDebug().nospace() << "DOM" << dominantFrequency;
 
@@ -62,13 +64,29 @@ void Electrode::applyTreatment(int x) {
 //    calculateDominantFrequency();
 }
 
-int Electrode::getDominantFrequency() const {
-   return dominantFrequency;
+int Electrode::getDominantFrequency(int index) const {
+   return dominantFrequency[index];
 }
 
 void Electrode::setDominantFrequency(int newDomFreq) {
-   dominantFrequency = newDomFreq;
+   //dominantFrequency = newDomFreq;
 }
 
+double Electrode::getAvgDominantFrequency() const {
+    double avg = 0;
+
+    avg = (dominantFrequency[0] + dominantFrequency[1] + dominantFrequency[2] + dominantFrequency[3]) / 4.0;
+
+    return avg;
+}
+
+/* generating random data for graph */
+int Electrode::getFrequency(int time) const {
+    int randomNumber = QRandomGenerator::global()->bounded(-150,150);
+
+    qDebug() << "Random number between 1 and 30:" << randomNumber;
+
+    return randomNumber;
+}
 
 

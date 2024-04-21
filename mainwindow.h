@@ -12,9 +12,13 @@
 #include <QString>
 #include <QWidget>
 #include <QDateEdit>
+#include <qcustomplot.h>
+#include "graph.h"
+#include "session.h"
+#include "handleconnection.h"
 #include <QListWidget>
 //#include "pcwindow.h"
-#include <session.h>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,10 +29,11 @@ class MainWindow : public QMainWindow
    Q_OBJECT
 
 public:
-   MainWindow(QWidget *parent = nullptr);
-   ~MainWindow();
-   QTimer *timer;
-   QLabel *redLED;
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+    QTimer *timer;
+    QLabel *redLED;
+    int MAX_TIME=90;
 
 private:
    Ui::MainWindow *ui;
@@ -38,12 +43,16 @@ private:
 //    DigitalClock* connectionClock();
 
     QString formatTime(int totalSeconds);
+    QWidget* parentPtr;
     int remainingTime;
     QTimer *sTimer;
     int powerLevel;
     QLabel *labelDateTime;
+    Graph *graph;
+    Session *session;
+    HandleConnection handleConnection;
     QString selectedSession;
-//    pcwindow *pcwindow;
+     pcwindow *pcwindow;
 
     void togglePower();
     // battery level functions
@@ -57,6 +66,8 @@ private:
     void setNewDate();
     void setCurrentDate();
     void getCurrentDate();
+    void initializeGraph();
+    void clearGraph();
 
    //active session
    Session *activeSession;
