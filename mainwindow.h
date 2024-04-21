@@ -12,8 +12,6 @@
 #include <QString>
 #include <QWidget>
 #include <QDateEdit>
-#include <QListWidget>
-//#include "pcwindow.h"
 #include <session.h>
 
 QT_BEGIN_NAMESPACE
@@ -36,34 +34,27 @@ private:
    deviceProfile* devProfile;
 //    DigitalClock* sessionClock; -> alternate i tried bc i thought i was being slick about states but i wasnt lol
 //    DigitalClock* connectionClock();
+   QString formatTime(int totalSeconds);
+   int remainingTime;
+   QTimer *sTimer;
+   int powerLevel;
+   QLabel *labelDateTime;
 
-    QString formatTime(int totalSeconds);
-    int remainingTime;
-    QTimer *sTimer;
-    int powerLevel;
-    QLabel *labelDateTime;
-    QString selectedSession;
-//    pcwindow *pcwindow;
+   void togglePower();
+   // battery level functions
+   void drainBattery();
+   void batteryDangerNotice();
+   void chargeBattery();
+   void updateBattery(int);
+   void treatment();
 
-    void togglePower();
-    // battery level functions
-    void drainBattery();
-    void batteryDangerNotice();
-    void chargeBattery();
-    void updateBattery(int);
-    void treatment();
-
-    //date/time
-    void setNewDate();
-    void setCurrentDate();
-    void getCurrentDate();
+   //date/time
+   void setNewDate();
+   void setCurrentDate();
+   void getCurrentDate();
 
    //active session
    Session *activeSession;
-
-    // session logs
-    void addSessionLog(QListWidget *listWidget, const QString &sessEntry);
-    void addSessionLogs(QListWidget *listWidget, const QStringList &sessEntries);
 
 
 private slots:
@@ -74,30 +65,27 @@ private slots:
    void turnOnLED(QLabel *LED);
    void turnOffLED(QLabel *redLED);
 //    void updateDateTime(const QDateTime &dateTime);
+   void on_newSessionBtn_clicked();
+   void on_sessionLogBtn_clicked();
+   void on_dateAndTimeBtn_clicked();
+   void on_backBtn_clicked();
+   void on_backBtn_2_clicked();
+   void on_backBtn_3_clicked();
+   void on_cancelChangeBtn_clicked();
+   void on_powerBtn_released();
+   void displayDateTime(const QDateTime &dateTime);
 
-    void on_newSessionBtn_clicked();
-    void on_sessionLogBtn_clicked();
-    void on_dateAndTimeBtn_clicked();
-    void on_backBtn_clicked();
-    void on_backBtn_2_clicked();
-    void on_backBtn_3_clicked();
-    void on_cancelChangeBtn_clicked();
-    void on_powerBtn_released();
-    void displayDateTime(const QDateTime &dateTime);
+   // pause/start controls
+   void on_stopBtn_2_clicked();
+   void on_pauseBtn_2_clicked();
+   void on_startBtn_2_clicked();
+   void on_dateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
+   void on_confirmChangeBtn_clicked();
+   void on_redled_toggled(bool checked);
+   void on_blueled_toggled(bool checked);
+   void on_greenled_toggled(bool checked);
 
-    // pause/start controls
-    void on_stopBtn_2_clicked();
-    void on_pauseBtn_2_clicked();
-    void on_startBtn_2_clicked();
-    void on_dateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
-    void on_confirmChangeBtn_clicked();
-    void on_redled_toggled(bool checked);
-    void on_blueled_toggled(bool checked);
-    void on_greenled_toggled(bool checked);
-    void on_listWidget_2_itemClicked(QListWidgetItem *item);
-    void on_uploadSessBtn_clicked();
-    void toggleBlueLightOn();
-
+   void toggleBlueLightOn();
 };
 #endif // MAINWINDOW_H
 

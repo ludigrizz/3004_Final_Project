@@ -40,22 +40,6 @@ MainWindow::MainWindow(QWidget *parent)
    ui->blueled->setStyleSheet("background-color: grey");
    ui->greenled->setStyleSheet("background-color: grey");
 
-    on_blueled_toggled(true);
-
-
-//    QPushButton *adbtn = new QPushButton("Add Item");
-//    layout->addWidget(adbtn);
-
-//    QObject::connect(adbtn, &QPushButton::clicked, [&]() {
-//        QListWidgetItem *i = new QListWidgetItem("new i");
-//        ui->listWidget_2->addItem(i);
-//    });
-
-    addSessionLog(ui->listWidget_2, "first list addition");
-    QStringList sessItems = {"sess1", "sess2", "sess2"};
-    addSessionLogs(ui->listWidget_2, sessItems);
-
-
 //    bool hasContact = false;
    //SOMEFUNCTION THAT INITIALIZES THE CONTACT/STARTS SESSION WHICH MAKES...
 //    hasContact = true;
@@ -114,15 +98,6 @@ MainWindow::~MainWindow()
 void MainWindow::getCurrentDate() {
    ui->dateTimeEdit->dateTime();
 
-}
-
-void MainWindow::addSessionLog(QListWidget *listWidget, const QString &sessEntry) {
-    QListWidgetItem *i = new QListWidgetItem(sessEntry);
-    listWidget->addItem(i);
-}
-
-void MainWindow::addSessionLogs(QListWidget *listWidget, const QStringList &sessEntries) {
-    listWidget->addItems(sessEntries);
 }
 
 void MainWindow::setCurrentDate() {
@@ -485,15 +460,5 @@ void MainWindow::on_greenled_toggled(bool lostContact)
 }
 
 
-void MainWindow::on_listWidget_2_itemClicked(QListWidgetItem *item)
-{
-    selectedSession = item->text();
-
-}
 
 
-void MainWindow::on_uploadSessBtn_clicked()
-{
-    // call some function to add to the text list of sessions for the pc where you can then call the add list function in pcwindow.h
-    qDebug() << "Selected session to upload is: " << selectedSession;
-}
