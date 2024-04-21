@@ -17,12 +17,13 @@ public:
    void applyTreatment(int x);
 
    // Getter
-   int getDominantFrequency() const;
+   int getDominantFrequency(int) const;
    void setDominantFrequency(int newDomFreq);
    int getFrequency(int) const;
+   double getAvgDominantFrequency() const;
 
 private:
-   int dominantFrequency;
+   QVector<int> dominantFrequency;
    int alphaFreq;
    int betaFreq;
    int deltaFreq;
@@ -31,6 +32,7 @@ private:
    int betaAmp;
    int deltaAmp;
    int thetaAmp;
+
 };
 
 #endif // ELECTRODE_H

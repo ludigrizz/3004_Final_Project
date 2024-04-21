@@ -60,6 +60,7 @@ SOURCES       = ../LED.cpp \
 		../digitalclock.cpp \
 		../electrode.cpp \
 		../graph.cpp \
+		../handleconnection.cpp \
 		../ledindicator.cpp \
 		../main.cpp \
 		../mainwindow.cpp \
@@ -68,6 +69,7 @@ SOURCES       = ../LED.cpp \
 		../test.cpp \
 		../wave.cpp moc_digitalclock.cpp \
 		moc_graph.cpp \
+		moc_handleconnection.cpp \
 		moc_mainwindow.cpp \
 		moc_qcustomplot.cpp
 OBJECTS       = LED.o \
@@ -78,6 +80,7 @@ OBJECTS       = LED.o \
 		digitalclock.o \
 		electrode.o \
 		graph.o \
+		handleconnection.o \
 		ledindicator.o \
 		main.o \
 		mainwindow.o \
@@ -87,6 +90,7 @@ OBJECTS       = LED.o \
 		wave.o \
 		moc_digitalclock.o \
 		moc_graph.o \
+		moc_handleconnection.o \
 		moc_mainwindow.o \
 		moc_qcustomplot.o
 DIST          = ../icons/Screenshot \
@@ -182,6 +186,7 @@ DIST          = ../icons/Screenshot \
 		../digitalclock.h \
 		../electrode.h \
 		../graph.h \
+		../handleconnection.h \
 		../ledindicator.h \
 		../mainwindow.h \
 		../qcustomplot.h \
@@ -194,6 +199,7 @@ DIST          = ../icons/Screenshot \
 		../digitalclock.cpp \
 		../electrode.cpp \
 		../graph.cpp \
+		../handleconnection.cpp \
 		../ledindicator.cpp \
 		../main.cpp \
 		../mainwindow.cpp \
@@ -386,8 +392,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../LED.h ../batteryprogressbar.h ../datetimedialog.h ../deviceControl.h ../deviceprofile.h ../digitalclock.h ../electrode.h ../graph.h ../ledindicator.h ../mainwindow.h ../qcustomplot.h ../session.h ../wave.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../LED.cpp ../batteryprogressbar.cpp ../batteryprogressbar.cpp ../datetimedialog.cpp ../deviceprofile.cpp ../digitalclock.cpp ../electrode.cpp ../graph.cpp ../ledindicator.cpp ../main.cpp ../mainwindow.cpp ../qcustomplot.cpp ../session.cpp ../test.cpp ../wave.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../LED.h ../batteryprogressbar.h ../datetimedialog.h ../deviceControl.h ../deviceprofile.h ../digitalclock.h ../electrode.h ../graph.h ../handleconnection.h ../ledindicator.h ../mainwindow.h ../qcustomplot.h ../session.h ../wave.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../LED.cpp ../batteryprogressbar.cpp ../batteryprogressbar.cpp ../datetimedialog.cpp ../deviceprofile.cpp ../digitalclock.cpp ../electrode.cpp ../graph.cpp ../handleconnection.cpp ../ledindicator.cpp ../main.cpp ../mainwindow.cpp ../qcustomplot.cpp ../session.cpp ../test.cpp ../wave.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../mainwindow.ui $(DISTDIR)/
 
 
@@ -420,9 +426,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_digitalclock.cpp moc_graph.cpp moc_mainwindow.cpp moc_qcustomplot.cpp
+compiler_moc_header_make_all: moc_digitalclock.cpp moc_graph.cpp moc_handleconnection.cpp moc_mainwindow.cpp moc_qcustomplot.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_digitalclock.cpp moc_graph.cpp moc_mainwindow.cpp moc_qcustomplot.cpp
+	-$(DEL_FILE) moc_digitalclock.cpp moc_graph.cpp moc_handleconnection.cpp moc_mainwindow.cpp moc_qcustomplot.cpp
 moc_digitalclock.cpp: ../digitalclock.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -430,14 +436,25 @@ moc_digitalclock.cpp: ../digitalclock.h \
 
 moc_graph.cpp: ../graph.h \
 		../qcustomplot.h \
+		../electrode.h \
+		../wave.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/student/3004_Final_Project/build-neureset-device-ui-Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/student/3004_Final_Project -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../graph.h -o moc_graph.cpp
+
+moc_handleconnection.cpp: ../handleconnection.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/student/3004_Final_Project/build-neureset-device-ui-Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/student/3004_Final_Project -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../handleconnection.h -o moc_handleconnection.cpp
 
 moc_mainwindow.cpp: ../mainwindow.h \
 		../deviceprofile.h \
 		../qcustomplot.h \
 		../graph.h \
+		../electrode.h \
+		../wave.h \
+		../session.h \
+		../handleconnection.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/student/3004_Final_Project/build-neureset-device-ui-Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/student/3004_Final_Project -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtPrintSupport -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../mainwindow.h -o moc_mainwindow.cpp
@@ -492,8 +509,13 @@ electrode.o: ../electrode.cpp ../electrode.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o electrode.o ../electrode.cpp
 
 graph.o: ../graph.cpp ../graph.h \
-		../qcustomplot.h
+		../qcustomplot.h \
+		../electrode.h \
+		../wave.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o graph.o ../graph.cpp
+
+handleconnection.o: ../handleconnection.cpp ../handleconnection.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o handleconnection.o ../handleconnection.cpp
 
 ledindicator.o: ../ledindicator.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ledindicator.o ../ledindicator.cpp
@@ -501,14 +523,23 @@ ledindicator.o: ../ledindicator.cpp
 main.o: ../main.cpp ../mainwindow.h \
 		../deviceprofile.h \
 		../qcustomplot.h \
-		../graph.h
+		../graph.h \
+		../electrode.h \
+		../wave.h \
+		../session.h \
+		../handleconnection.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 mainwindow.o: ../mainwindow.cpp ../mainwindow.h \
 		../deviceprofile.h \
 		../qcustomplot.h \
 		../graph.h \
-		ui_mainwindow.h
+		../electrode.h \
+		../wave.h \
+		../session.h \
+		../handleconnection.h \
+		ui_mainwindow.h \
+		../digitalclock.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../mainwindow.cpp
 
 qcustomplot.o: ../qcustomplot.cpp ../qcustomplot.h
@@ -532,6 +563,9 @@ moc_digitalclock.o: moc_digitalclock.cpp
 
 moc_graph.o: moc_graph.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_graph.o moc_graph.cpp
+
+moc_handleconnection.o: moc_handleconnection.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_handleconnection.o moc_handleconnection.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

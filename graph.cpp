@@ -26,3 +26,8 @@ void Graph::updateGraph(double time, double freq) {
     m_plot->graph(0)->setData(x, y); // Set the data
     m_plot->replot();
 }
+
+void Graph::clearGraph() {
+    m_plot->clearGraphs();
+    qDebug() << "clear";
+}

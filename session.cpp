@@ -22,8 +22,6 @@ Session::Session(Electrode electrodes[], int size) {
 
    //qDebug().nospace() << "Overall average dominant frequency (DRF) at end of session is " << calculateBaseline(electrodesVec, size);
 
-
-
 }
 
 void Session::treatmentRound(int offsetHz, int roundNum) {
@@ -52,7 +50,7 @@ void Session::treatmentRound(int offsetHz, int roundNum) {
 
    auto getFrequencyFunc = [](Electrode& electrode) {
        electrode.calculateDominantFrequency();
-       qDebug().nospace() << "Electrode DRF is " << electrode.getDominantFrequency();
+       //qDebug().nospace() << "Electrode DRF is " << electrode.getDominantFrequency();
    };
 
    std::vector<std::thread> frequencyThreads;
@@ -72,30 +70,30 @@ void Session::treatmentRound(int offsetHz, int roundNum) {
 /* c: unused function below*/
 
 int Session::calculateBaseline(std::vector<Electrode>& electrodesVec, int size) {
-   // Vector to hold futures for each electrode calculation
-   std::vector<std::future<void>> futures;
+//   // Vector to hold futures for each electrode calculation
+//   std::vector<std::future<void>> futures;
 
-   // Calculate dominant frequency for each electrode concurrently
-   for (auto& electrode : electrodesVec) {
-       // Start a thread for calculating dominant frequency for each electrode
-       futures.emplace_back(std::async(std::launch::async, &Electrode::calculateDominantFrequency, &electrode));
-   }
+//   // Calculate dominant frequency for each electrode concurrently
+//   for (auto& electrode : electrodesVec) {
+//       // Start a thread for calculating dominant frequency for each electrode
+//       futures.emplace_back(std::async(std::launch::async, &Electrode::calculateDominantFrequency, &electrode));
+//   }
 
-   // Wait for all threads to finish
-   for (auto& future : futures) {
-       future.wait();
-   }
+//   // Wait for all threads to finish
+//   for (auto& future : futures) {
+//       future.wait();
+//   }
 
-   // Calculate total dominant frequency
-   int totalDominantFreq = 0;
-   for (auto& electrode : electrodesVec) {
-       totalDominantFreq += electrode.getDominantFrequency();
-   }
+//   // Calculate total dominant frequency
+//   int totalDominantFreq = 0;
+//   for (auto& electrode : electrodesVec) {
+//       totalDominantFreq += electrode.getDominantFrequency();
+//   }
 
-   // Calculate overall average dominant frequency
-   overallAverageDominantFreq = totalDominantFreq / size;
+//   // Calculate overall average dominant frequency
+//   overallAverageDominantFreq = totalDominantFreq / size;
 
-   return overallAverageDominantFreq;
+//   return overallAverageDominantFreq;
 }
 
 
@@ -103,8 +101,12 @@ int Session::getFrequency(int index, int time) {
     return electrodesVec1.at(index).getFrequency(time);
 }
 
-int Session::getDominantFrequency(int index) {
-    return electrodesVec1.at(index).getDominantFrequency();
+int Session::getDominantFrequency(int index, int t_id) {
+    return electrodesVec1.at(index).getDominantFrequency(t_id);
+}
+
+double Session::getAvgDominantFrequency(int index) {
+    return electrodesVec1.at(index).getAvgDominantFrequency();
 }
 
 

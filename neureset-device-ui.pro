@@ -17,6 +17,7 @@ SOURCES += \
     digitalclock.cpp \
     electrode.cpp \
     graph.cpp \
+    handleconnection.cpp \
     ledindicator.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     digitalclock.h \
     electrode.h \
     graph.h \
+    handleconnection.h \
     ledindicator.h \
     mainwindow.h \
     qcustomplot.h \

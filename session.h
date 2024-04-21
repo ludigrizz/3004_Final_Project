@@ -17,7 +17,8 @@ public:
    int calculateBaseline(std::vector<Electrode>& electrodes, int size); // c: unused
    int getOverallAverageDominantFreq() { return overallAverageDominantFreq; };
    int getFrequency(int, int);
-   int getDominantFrequency(int);
+   int getDominantFrequency(int, int);
+   double getAvgDominantFrequency(int);
 
 
 

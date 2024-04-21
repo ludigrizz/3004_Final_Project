@@ -13,6 +13,7 @@ public:
     explicit Graph(QCustomPlot *plot, QObject *parent = nullptr);
     void setupPlot();
     void updateGraph(double frequency, double amplitude);
+    void clearGraph();
 
 private:
     QCustomPlot *m_plot;

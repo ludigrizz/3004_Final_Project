@@ -15,6 +15,7 @@
 #include <qcustomplot.h>
 #include "graph.h"
 #include "session.h"
+#include "handleconnection.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -39,12 +40,14 @@ private:
 //    DigitalClock* sessionClock; -> alternate i tried bc i thought i was being slick about states but i wasnt lol
 //    DigitalClock* connectionClock();
     QString formatTime(int totalSeconds);
+    QWidget* parentPtr;
     int remainingTime;
     QTimer *sTimer;
     int powerLevel;
     QLabel *labelDateTime;
     Graph *graph;
     Session *session;
+    HandleConnection handleConnection;
 
     void togglePower();
     // battery level functions
@@ -59,7 +62,7 @@ private:
     void setCurrentDate();
     void getCurrentDate();
     void initializeGraph();
-    //void clearGraph();
+    void clearGraph();
 
 
 private slots:

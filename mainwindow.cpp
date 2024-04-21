@@ -17,7 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
       ui(new Ui::MainWindow),
       remainingTime(MAX_TIME),
       labelDateTime(ui->label),
-      graph(0)
+      graph(0),
+      parentPtr(parent)
 {
     ui->setupUi(this);
     QDate d = QDate::currentDate();
@@ -49,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent)
     //    hasContact = true;
     //    on_redled_toggled(true);
     on_blueled_toggled(true);
-    on_greenled_toggled(true);
+    //on_greenled_toggled(true);
 
 
 
@@ -228,38 +229,69 @@ void MainWindow::updateSessTimer() {
          * 1/16 of dominant + offset, rounds of therapy, and therapy */
 
         if (remainingTime == 30) {
+            on_greenled_toggled(true);
+            qDebug() << "treatment starting";
             session->treatmentRound(5, 1);
             graph->updateGraph(currtime, 150);
-
-        } else if (remainingTime == 25) {
-            int freq = session->getDominantFrequency(0);
+        } else if (remainingTime == 29){ // feedback
+            graph->updateGraph(currtime, 150);
+            qDebug() << "feedback";
+        } else if (remainingTime == 6) {
+            //on_greenled_toggled(false);
+            qDebug() << "getting df";
+            int freq = session->getDominantFrequency(0, 0);
             graph->updateGraph(currtime, freq);
 
         } else if (remainingTime == 24) {
+            //on_greenled_toggled(true);
+            qDebug() << "treatment starting";
             session->treatmentRound(10, 2);
             graph->updateGraph(currtime, 150);
 
-        } else if (remainingTime == 19) {
-            int freq = session->getDominantFrequency(0);
+        } else if (remainingTime == 23){ // feedback
+            graph->updateGraph(currtime, 150);
+            qDebug() << "feedback";
+
+        } else if (remainingTime == 5) {
+            qDebug() << "getting df";
+            int freq = session->getDominantFrequency(0, 1);
             graph->updateGraph(currtime, freq);
 
         } else if (remainingTime == 18) {
             session->treatmentRound(15, 3);
-
             graph->updateGraph(currtime, 150);
-        } else if (remainingTime == 13) {
-            int freq = session->getDominantFrequency(0);
+
+        } else if (remainingTime == 17){ // feedback
+            graph->updateGraph(currtime, 150);
+            qDebug() << "feedback";
+
+        } else if (remainingTime == 4) {
+            qDebug() << "getting df";
+            int freq = session->getDominantFrequency(0, 2);
             graph->updateGraph(currtime, freq);
 
         } else if (remainingTime == 12) {
+            //on_greenled_toggled(true);
+            qDebug() << "treatment starting";
             session->treatmentRound(20, 4);
             graph->updateGraph(currtime, 150);
 
-        } else if (remainingTime == 7) {
-            int freq = session->getDominantFrequency(0);
+        } else if (remainingTime == 11){ // feedback
+            graph->updateGraph(currtime, 150);
+            qDebug() << "feedback";
+
+        } else if (remainingTime == 3) {
+            qDebug() << "getting df";
+            int freq = session->getDominantFrequency(0, 3);
+            graph->updateGraph(currtime, freq);
+
+        } else if (remainingTime == 2) {
+            qDebug() << "ag freq";
+            int freq = session->getAvgDominantFrequency(0);
             graph->updateGraph(currtime, freq);
 
         } else {
+            qDebug() << "establishing baseline";
             int freq = session->getFrequency(0, currtime);
             graph->updateGraph(currtime, freq);
         }
@@ -330,8 +362,6 @@ void MainWindow::on_newSessionBtn_clicked()
         };
         int numElectrodes = sizeof(electrodes) / sizeof(electrodes[0]);
 
-        //    Electrode [] *elctrodesPtr = &
-
         // Create a session object
         session = new Session(electrodes, numElectrodes);
 
@@ -380,8 +410,14 @@ void MainWindow::on_stopBtn_2_clicked()
 {
     qInfo("stOP");
     timer->stop();
-    remainingTime = 60;
+    remainingTime = 90;
     ui->sessTimer->display(formatTime(remainingTime));
+
+    // contact is lost
+     handleConnection.contactLost();
+
+    // reset graph
+    clearGraph();
 }
 
 
@@ -389,6 +425,21 @@ void MainWindow::on_pauseBtn_2_clicked()
 {
     qInfo("pause");
     timer->stop();
+
+    // contact is loss
+    handleConnection.contactLost();
+
+    QMessageBox::StandardButton ret = QMessageBox::question(parentPtr, "Connection Lost!", "You have 5 min to connect back. Do you want to continue session?",
+                                    QMessageBox::Yes | QMessageBox::No);
+
+    if (ret == QMessageBox::Yes) {
+       on_startBtn_2_clicked();
+
+    } else {
+        // end session
+        on_stopBtn_2_clicked();
+
+    }
 }
 
 void MainWindow::on_startBtn_2_clicked()
@@ -396,6 +447,8 @@ void MainWindow::on_startBtn_2_clicked()
     qInfo("start");
 
     timer->start(1000); // 1.30 min
+
+    handleConnection.contactRegained();
 }
 
 void MainWindow::displayDateTime(const QDateTime &dateTime) {
@@ -422,6 +475,7 @@ void MainWindow::on_confirmChangeBtn_clicked()
 }
 
 
+// contact is loss
 void MainWindow::on_redled_toggled(bool lostContact)
 {
     QTimer *redTimer = new QTimer(this);
@@ -440,7 +494,7 @@ void MainWindow::on_redled_toggled(bool lostContact)
     }
 }
 
-
+// contact
 void MainWindow::on_blueled_toggled(bool hasContact)
 {
     if (hasContact) {
@@ -452,17 +506,18 @@ void MainWindow::on_blueled_toggled(bool hasContact)
 }
 
 
+// treatment
 void MainWindow::on_greenled_toggled(bool lostContact)
 {
-    QTimer *greemTimer = new QTimer(this);
+    QTimer *greenTimer = new QTimer(this);
 
     if (lostContact) {
-        connect(greemTimer, &QTimer::timeout, [this]() {
+        connect(greenTimer, &QTimer::timeout, [this]() {
             static bool isOn = true;
             ui->greenled->setStyleSheet(isOn ? "background-color: green" : "background-color: grey");
             isOn= !isOn;
         });
-        greemTimer->start(500);
+        greenTimer->start(500);
     } else {
         timer->stop();
         ui->greenled->setStyleSheet("background-color: grey");
@@ -471,7 +526,7 @@ void MainWindow::on_greenled_toggled(bool lostContact)
 
 
 void MainWindow::initializeGraph() {
-    if (!graph) {  // Ensure graph is only initialized once
+   // if (!graph) {  // Ensure graph is only initialized once
         // Check if the customPlot widget from the UI file is correctly initialized
         if (!ui->customPlot) {
             qWarning() << "CustomPlot widget is not initialized!";
@@ -486,15 +541,14 @@ void MainWindow::initializeGraph() {
             qWarning() << "Failed to create Graph object!";
             return;
         }
-    } else {
-        qDebug() << "Graph is already initialized.";
-    }
+//    } else {
+//        qDebug() << "Graph is already initialized.";
+//    }
 
 }
-//void MainWindow::clearGraph() {
-//    if (graph) {
-//        // Depending on your design, you might delete the graph or simply hide it
-//       // graph->clearData(); // You might need to implement this method in your Graph class
-//        graph->setVisible(false);
-//    }
-//}
+void MainWindow::clearGraph() {
+    ui->customPlot->clearGraphs();
+    ui->customPlot->replot();
+    qDebug() << "clear";
+
+}
