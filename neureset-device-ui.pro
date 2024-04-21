@@ -25,6 +25,8 @@ SOURCES += \
     session.cpp \
     test.cpp \
     wave.cpp
+    pcwindow.cpp
+
 
 HEADERS += \
     LED.h \
@@ -41,9 +43,12 @@ HEADERS += \
     qcustomplot.h \
     session.h \
     wave.h
+    pcwindow.h
+
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    pcwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

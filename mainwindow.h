@@ -16,6 +16,8 @@
 #include "graph.h"
 #include "session.h"
 #include "handleconnection.h"
+#include <QListWidget>
+//#include "pcwindow.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -24,7 +26,7 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+   Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
@@ -34,11 +36,12 @@ public:
     int MAX_TIME=90;
 
 private:
-    Ui::MainWindow *ui;
-    bool isPowerOn;
-    deviceProfile* devProfile;
+   Ui::MainWindow *ui;
+   bool isPowerOn;
+   deviceProfile* devProfile;
 //    DigitalClock* sessionClock; -> alternate i tried bc i thought i was being slick about states but i wasnt lol
 //    DigitalClock* connectionClock();
+
     QString formatTime(int totalSeconds);
     QWidget* parentPtr;
     int remainingTime;
@@ -48,6 +51,8 @@ private:
     Graph *graph;
     Session *session;
     HandleConnection handleConnection;
+    QString selectedSession;
+     pcwindow *pcwindow;
 
     void togglePower();
     // battery level functions
@@ -64,15 +69,23 @@ private:
     void initializeGraph();
     void clearGraph();
 
+   //active session
+   Session *activeSession;
+
+    // session logs
+    void addSessionLog(QListWidget *listWidget, const QString &sessEntry);
+    void addSessionLogs(QListWidget *listWidget, const QStringList &sessEntries);
+
 
 private slots:
-    // session timers
-    void updateSessTimer();
+   // session timers
+   void updateSessTimer();
 
-    void toggleLED(QLabel *LED);
-    void turnOnLED(QLabel *LED);
-    void turnOffLED(QLabel *redLED);
+   void toggleLED(QLabel *LED);
+   void turnOnLED(QLabel *LED);
+   void turnOffLED(QLabel *redLED);
 //    void updateDateTime(const QDateTime &dateTime);
+
     void on_newSessionBtn_clicked();
     void on_sessionLogBtn_clicked();
     void on_dateAndTimeBtn_clicked();
@@ -92,5 +105,12 @@ private slots:
     void on_redled_toggled(bool checked);
     void on_blueled_toggled(bool checked);
     void on_greenled_toggled(bool checked);
+    void on_listWidget_2_itemClicked(QListWidgetItem *item);
+    void on_uploadSessBtn_clicked();
+    void toggleBlueLightOn();
+
 };
 #endif // MAINWINDOW_H
+
+
+
