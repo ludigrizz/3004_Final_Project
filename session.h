@@ -22,11 +22,19 @@ public:
   explicit Session(Electrode electrodes[], int size, QObject *parent = nullptr);
   QDateTime getSessionStartTime() const;
 
+   void treatmentRound(int offsetHz, int roundNum);
+   int calculateBaseline(std::vector<Electrode>& electrodes, int size); // c: unused
+   int getOverallAverageDominantFreq() { return overallAverageDominantFreq; };
+   int getFrequency(int, int);
+   int getDominantFrequency(int, int);
+   double getAvgDominantFrequency(int);
+
 //   void startSessionProcess();
   void treatmentRound(QVector<Electrode>& electrodes, int offsetHz, int roundNum);
   void calculateElectrodeFrequencies(QVector<Electrode>& electrodes, int roundNum);
   int calculateBaseline(QVector<Electrode>& electrodes, int size);
   void applyTreatmentFunc(Electrode& electrode, int offsetHz);
+
 
 //   void treatmentRound(int offsetHz, int roundNum);
 //   int calculateBaseline();
@@ -64,6 +72,7 @@ private:
   bool paused = false;
   bool stopCurrentRound = false;
   int currentRound = 0;
+
 
 };
 

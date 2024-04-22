@@ -12,7 +12,13 @@
 #include <QString>
 #include <QWidget>
 #include <QDateEdit>
-#include <session.h>
+#include <qcustomplot.h>
+#include "graph.h"
+#include "session.h"
+#include "handleconnection.h"
+#include <QListWidget>
+//#include "pcwindow.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,10 +29,11 @@ class MainWindow : public QMainWindow
    Q_OBJECT
 
 public:
-   MainWindow(QWidget *parent = nullptr);
-   ~MainWindow();
-   QTimer *timer;
-   QLabel *redLED;
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+    QTimer *timer;
+    QLabel *redLED;
+    int MAX_TIME=90;
 
 private:
    Ui::MainWindow *ui;
@@ -34,27 +41,40 @@ private:
    deviceProfile* devProfile;
 //    DigitalClock* sessionClock; -> alternate i tried bc i thought i was being slick about states but i wasnt lol
 //    DigitalClock* connectionClock();
-   QString formatTime(int totalSeconds);
-   int remainingTime;
-   QTimer *sTimer;
-   int powerLevel;
-   QLabel *labelDateTime;
 
-   void togglePower();
-   // battery level functions
-   void drainBattery();
-   void batteryDangerNotice();
-   void chargeBattery();
-   void updateBattery(int);
-   void treatment();
+    QString formatTime(int totalSeconds);
+    QWidget* parentPtr;
+    int remainingTime;
+    QTimer *sTimer;
+    int powerLevel;
+    QLabel *labelDateTime;
+    Graph *graph;
+    Session *session;
+    HandleConnection handleConnection;
+    QString selectedSession;
+     pcwindow *pcwindow;
 
-   //date/time
-   void setNewDate();
-   void setCurrentDate();
-   void getCurrentDate();
+    void togglePower();
+    // battery level functions
+    void drainBattery();
+    void batteryDangerNotice();
+    void chargeBattery();
+    void updateBattery(int);
+    void treatment();
+
+    //date/time
+    void setNewDate();
+    void setCurrentDate();
+    void getCurrentDate();
+    void initializeGraph();
+    void clearGraph();
 
    //active session
    Session *activeSession;
+
+    // session logs
+    void addSessionLog(QListWidget *listWidget, const QString &sessEntry);
+    void addSessionLogs(QListWidget *listWidget, const QStringList &sessEntries);
 
 
 private slots:
@@ -84,8 +104,11 @@ private slots:
    void on_redled_toggled(bool checked);
    void on_blueled_toggled(bool checked);
    void on_greenled_toggled(bool checked);
+
+   void on_listWidget_2_itemClicked(QListWidgetItem *item);
+   void on_uploadSessBtn_clicked();
+   void toggleBlueLightOn();
    void onSessionStarted();
-//    void onSessionPaused();
    void updateUIforTreatment();
 
    void updateUIforTreatment2();
@@ -94,6 +117,7 @@ private slots:
 
    void toggleBlueLightOn();
    void toggleBlueLightOff();
+
 };
 #endif // MAINWINDOW_H
 

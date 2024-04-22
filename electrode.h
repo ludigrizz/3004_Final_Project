@@ -20,16 +20,22 @@ public:
   int getDominantFrequency() const;
   void setDominantFrequency(int newDomFreq);
 
+   // Getter
+   int getDominantFrequency(int) const;
+   int getFrequency(int) const;
+   double getAvgDominantFrequency() const;
+
 private:
-  int dominantFrequency;
-  int alphaFreq;
-  int betaFreq;
-  int deltaFreq;
-  int thetaFreq;
-  int alphaAmp;
-  int betaAmp;
-  int deltaAmp;
-  int thetaAmp;
+   QVector<int> dominantFrequency;
+   int dominantFrequency;
+   int alphaFreq;
+   int betaFreq;
+   int deltaFreq;
+   int thetaFreq;
+   int alphaAmp;
+   int betaAmp;
+   int deltaAmp;
+   int thetaAmp;
 };
 
 #endif // ELECTRODE_H

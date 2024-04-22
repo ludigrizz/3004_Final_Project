@@ -1,9 +1,9 @@
 #include "session.h"
 
+Session::Session(Electrode electrodes[], int size) {
 
-Session::Session(Electrode electrodes[], int size, QObject *parent) :
-   QObject(parent), numElectrodes(size), electrodesVec(electrodes, electrodes + size){
-
+    electrodesVec1.reserve(size);
+    
 }
 void Session::scheduleFromRound(int startRound) {
    if (startRound < 1 || startRound > 4) {
@@ -39,6 +39,7 @@ void Session::startSession() {
 
 void Session::startPrintOverallAvgDomFreq() {
    qDebug().nospace() << "Overall average dominant frequency (DRF) at start of session is " << calculateBaseline(electrodesVec, numElectrodes);
+
 }
 void Session::endPrintOverallAvgDomFreq() {
    qDebug().nospace() << "Overall average dominant frequency (DRF) at end of session is " << calculateBaseline(electrodesVec, numElectrodes);
@@ -76,6 +77,7 @@ void Session::treatmentRound(QVector<Electrode>& electrodes, int offsetHz, int r
    }
    currentRound = roundNum;
    emit treatmentAdministering();
+
    qDebug().nospace() << "***Start of Round " << roundNum << "***";
    qDebug().nospace() << "Administering treatment...";
 
@@ -84,7 +86,7 @@ void Session::treatmentRound(QVector<Electrode>& electrodes, int offsetHz, int r
        treatmentThreads.push_back(std::thread([&, offsetHz](){
            if (!paused) electrode.applyTreatment(offsetHz);
        }));
-//        treatmentThreads.emplace_back(treatmentFunc, std::ref(electrode));
+
    }
 
    // Join threads to wait for treatment completion
@@ -110,6 +112,7 @@ void Session::calculateElectrodeFrequencies(QVector<Electrode>& electrodes, int 
        }));
    }
 
+
    // Join threads to wait for treatment completion
    for (auto& thread : calculateThreads) {
        if (thread.joinable()) {
@@ -120,7 +123,11 @@ void Session::calculateElectrodeFrequencies(QVector<Electrode>& electrodes, int 
 
 }
 
-int Session::calculateBaseline(QVector<Electrode>& electrodesVec, int size) {
+
+
+/* c: unused function below*/
+
+int Session::calculateBaseline(std::vector<Electrode>& electrodesVec, int size) {
   // Vector to hold futures for each electrode calculation
   std::vector<std::future<void>> futures;
 
@@ -148,6 +155,44 @@ int Session::calculateBaseline(QVector<Electrode>& electrodesVec, int size) {
 }
 
 
+int Session::getFrequency(int index, int time) {
+    return electrodesVec1.at(index).getFrequency(time);
+
+// int Session::calculateBaseline(QVector<Electrode>& electrodesVec, int size) {
+//   // Vector to hold futures for each electrode calculation
+//   std::vector<std::future<void>> futures;
+
+//   // Calculate dominant frequency for each electrode concurrently
+//   for (auto& electrode : electrodesVec) {
+//       // Start a thread for calculating dominant frequency for each electrode
+//       futures.emplace_back(std::async(std::launch::async, &Electrode::calculateDominantFrequency, &electrode));
+//   }
+
+//   // Wait for all threads to finish
+//   for (auto& future : futures) {
+//       future.wait();
+//   }
+
+//   // Calculate total dominant frequency
+//   int totalDominantFreq = 0;
+//   for (auto& electrode : electrodesVec) {
+//       totalDominantFreq += electrode.getDominantFrequency();
+//   }
+
+//   // Calculate overall average dominant frequency
+//   overallAverageDominantFreq = totalDominantFreq / size;
+
+//   return overallAverageDominantFreq;
+
+// }
+
+int Session::getDominantFrequency(int index, int t_id) {
+    return electrodesVec1.at(index).getDominantFrequency(t_id);
+}
+
+double Session::getAvgDominantFrequency(int index) {
+    return electrodesVec1.at(index).getAvgDominantFrequency();
+}
 
 
 

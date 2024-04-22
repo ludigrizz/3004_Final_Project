@@ -1,4 +1,6 @@
 #include "electrode.h"
+#include <QRandomGenerator>
+#include <QDebug>
 
 Electrode::Electrode(Wave alpha, Wave beta, Wave delta, Wave theta)
       : alphaFreq(alpha.getFrequency()), betaFreq(beta.getFrequency()), deltaFreq(delta.getFrequency()),
@@ -8,7 +10,6 @@ Electrode::Electrode(Wave alpha, Wave beta, Wave delta, Wave theta)
 }
 
 void Electrode::calculateDominantFrequency() {
-
   dominantFrequency = (alphaFreq * pow(alphaAmp, 2) + betaFreq * pow(betaAmp, 2) +
                        deltaFreq * pow(deltaAmp, 2) + thetaFreq * pow(thetaAmp, 2)) /
                       (pow(alphaAmp, 2) + pow(betaAmp, 2) + pow(deltaAmp, 2) + pow(thetaAmp, 2));
@@ -62,7 +63,27 @@ int Electrode::getDominantFrequency() const {
 void Electrode::setDominantFrequency(int newDomFreq) {
   dominantFrequency = newDomFreq;
 }
+int Electrode::getDominantFrequency(int index) const {
+   return dominantFrequency[index];
+}
 
+
+double Electrode::getAvgDominantFrequency() const {
+    double avg = 0;
+
+    avg = (dominantFrequency[0] + dominantFrequency[1] + dominantFrequency[2] + dominantFrequency[3]) / 4.0;
+
+    return avg;
+}
+
+/* generating random data for graph */
+int Electrode::getFrequency(int time) const {
+    int randomNumber = QRandomGenerator::global()->bounded(-150,150);
+
+    qDebug() << "Random number between 1 and 30:" << randomNumber;
+
+    return randomNumber;
+}
 
 
 
