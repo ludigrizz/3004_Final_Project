@@ -88,3 +88,17 @@ To compile and run do the following:
 3. Then press the green "play" button to build.
 4. The project will build and launch in the VM now.
 
+# Contributions
+All contributions are more concretely visible in the aforementionned [project board](https://www.drupal.org/project/issues/admin_menu](https://github.com/users/ludigrizz/projects/1)).
+
+For diagrams: 
+    Sofia contributed use cases 4-6, the use case diagram and state diagram.
+    Elsa contributed for use cases 1-3 and sequence diagrams.
+    Christina contributed the class diagram.
+    Traceability matrix was divided equally amongst everyone.
+
+For Coding/Implementation:
+    Sofia contributed all the [neureset device and PC front-end implementations](https://github.com/ludigrizz/3004_Final_Project/issues/23) and organization. She also contributed to the handling and building of features like             timers, routing slots and sockets, etc. This work supported the device main page, date and time page, new session page, session log device ui page, and the pc session log page.
+    Elsa contributed to building the session and electrode logic and classes that support the new session pages and its history connects to the session log page.
+    Christina contributed to the building of the graph in new session and bridging Elsa's session logic to the mainwindow ui components made by Sofia.
+    
