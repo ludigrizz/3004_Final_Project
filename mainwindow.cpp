@@ -91,20 +91,12 @@ MainWindow::MainWindow(QWidget *parent)
    ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
    connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, this, &MainWindow::on_dateTimeEdit_dateTimeChanged);
    connect(ui->dateTimeEdit, &QDateTimeEdit::dateTimeChanged, this, &MainWindow::displayDateTime);
-   // New Session
-//    connect(activeSession, &Session::sessionStarted, this, &MainWindow::on_startBtn_2_clicked);
-//    connect(ui->startBtn_2, &QPushButton::clicked, activeSession, &Session::startSession);
-//    connect(activeSession, &Session::treatmentStarted, this, &MainWindow::toggleBlueLightOn);
-//    connect(activeSession, &Session::sessionStarted, this, &MainWindow::on_blueled_toggled);
-
-
 
     ui->stackedWidget->setCurrentIndex(0); //makes sure its always on menu screen
    // sessionTimer initialization
    timer = new QTimer(this);
    connect(timer, SIGNAL(timeout()), this, SLOT(updateSessTimer()));
    ui->sessTimer->display(formatTime(remainingTime));
-
 }
 
 MainWindow::~MainWindow()
@@ -112,6 +104,12 @@ MainWindow::~MainWindow()
    delete ui;
    delete timer;
    delete activeSession;
+}
+
+void MainWindow::updateUIOnPause() {
+   toggleBlueLightOn();
+   ui->greenled->setStyleSheet("background-color: grey");
+
 }
 
 void MainWindow::getCurrentDate() {
@@ -453,6 +451,7 @@ void MainWindow::on_powerBtn_released()
 
 void MainWindow::on_stopBtn_2_clicked()
 {
+
     qInfo("stOP");
     timer->stop();
     remainingTime = 90;
@@ -468,6 +467,7 @@ void MainWindow::on_stopBtn_2_clicked()
 
 void MainWindow::on_pauseBtn_2_clicked()
 {
+
     qInfo("pause");
     timer->stop();
 
@@ -490,12 +490,68 @@ void MainWindow::on_pauseBtn_2_clicked()
 
 void MainWindow::on_startBtn_2_clicked()
 {
-    qInfo("start");
+   if (activeSession) {
+       qWarning() << "alr active session, please stop or pause current session";
+       return;
+   }
 
-    timer->start(1000); // 1.30 min
+   qInfo("start");
+   timer->start(1000);
+   //new Session
+   Wave alpha(9, 2, "alpha");
+   Wave beta(15, 2, "beta");
+   Wave delta(2, 2, "delta");
+   Wave theta(4, 2, "theta");
 
-    handleConnection.contactRegained();
+   // Define sample electrodes
+   Electrode electrodes[] = {
+       Electrode(alpha, beta, delta, theta),
+       Electrode(alpha, beta, delta, theta),
+       Electrode(alpha, beta, delta, theta),
+       Electrode(alpha, beta, delta, theta),
+       Electrode(alpha, beta, delta, theta)
+   };
+   int numElectrodes = sizeof(electrodes) / sizeof(electrodes[0]);
+
+   // Create a session object
+   activeSession = new Session(electrodes, numElectrodes);
+
+//        on_greenled_toggled(false);
+   connect(activeSession, &Session::sessionStarted, this, &MainWindow::onSessionStarted);
+   connect(activeSession, &Session::treatmentAdministering, this, &MainWindow::updateUIforTreatment);
+   connect(activeSession, &Session::treatmentAdministrationDone, this, &MainWindow::updateUIforTreatment2);
+//    connect(activeSession, &Session::sessionEnded, this,&MainWindow::onSessionEnded);
+
+
+   qDebug() << "Session started!";
+   activeSession->startSession();
+
 }
+
+void MainWindow::onSessionStarted() {
+   qDebug() << "Session officially started";
+   toggleBlueLightOn();
+}
+
+void MainWindow::updateUIforTreatment() {
+   ui->greenled->setStyleSheet("background-color: green");
+}
+
+void MainWindow::updateUIforTreatment2() {
+   ui->greenled->setStyleSheet("background-color: grey");
+}
+
+void MainWindow::onSessionEnded() {
+   qInfo() << "Session ended";
+   toggleBlueLightOff();
+   if (activeSession) {
+       disconnect(activeSession, nullptr, this, nullptr);
+       delete activeSession;
+       activeSession = nullptr;
+   }
+
+}
+
 
 void MainWindow::displayDateTime(const QDateTime &dateTime) {
    QString formattedStrDateTime = dateTime.toString("yyyy-MM-dd HH:mm:ss");
@@ -544,6 +600,11 @@ void MainWindow::on_redled_toggled(bool lostContact)
 void MainWindow::toggleBlueLightOn() {
    qDebug() <<"Blue light toggled on";
    ui->blueled->setStyleSheet("background-color: blue");
+}
+
+void MainWindow::toggleBlueLightOff() {
+   qDebug() <<"Blue light toggled off";
+   ui->blueled->setStyleSheet("background-color: grey");
 }
 
 void MainWindow::on_blueled_toggled(bool hasContact)

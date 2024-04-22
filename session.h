@@ -13,6 +13,10 @@
 
 class Session : public QObject {
    Q_OBJECT
+
+//    bool paused = false;
+//    bool stopCurrentRound = false;
+//    int currentRound = 0;
 public:
   // Constructor
   explicit Session(Electrode electrodes[], int size, QObject *parent = nullptr);
@@ -26,46 +30,50 @@ public:
    double getAvgDominantFrequency(int);
 
 //   void startSessionProcess();
-  //void treatmentRound(QVector<Electrode>& electrodes, int offsetHz, int roundNum);
-  //void calculateElectrodeFrequencies(QVector<Electrode>& electrodes);
-  //int calculateBaseline(QVector<Electrode>& electrodes, int size);
-  //void applyTreatmentFunc(Electrode& electrode, int offsetHz);
+  void treatmentRound(QVector<Electrode>& electrodes, int offsetHz, int roundNum);
+  void calculateElectrodeFrequencies(QVector<Electrode>& electrodes, int roundNum);
+  int calculateBaseline(QVector<Electrode>& electrodes, int size);
+  void applyTreatmentFunc(Electrode& electrode, int offsetHz);
+
 
 //   void treatmentRound(int offsetHz, int roundNum);
 //   int calculateBaseline();
   int getOverallAverageDominantFreq() { return overallAverageDominantFreq; };
   QTimer* getTimer() { return timer; }
   bool getPaused() { return paused; }
-//   void pause();
-//   void resume();
+  void pauseResumeSession();
+  void resumeSession();
+  void startPrintOverallAvgDomFreq();
+  void endPrintOverallAvgDomFreq();
+  void scheduleFromRound(int startRound);
 
 signals:
    void sessionStarted();
-   void treatmentStarted();
+   void treatmentAdministering();
+
+   void treatmentAdministrationDone();
+   void sessionEnded();
    void treatmentPaused();
+   void sessionPaused();
+   void sessionResumed();
 
 public slots:
    void startSession();
-
-//private slots:
-//    void continueTreatment();
+   void stopSession();
 
 private:
-   int overallAverageDominantFreq;
-   // Helper function to apply treatment concurrently
-   QVector<Electrode>electrodesVec1;
-//   int overallAverageDominantFreq;
-//   QTimer *timer;
-//   QDateTime startTime;
-//   int numElectrodes;
-//   int currentRound;
-//   int currentOffset;
+  int overallAverageDominantFreq;
+  QTimer *timer;
+  QDateTime startTime;
+  int numElectrodes;
+  int currentOffset;
 //   std::atomic<bool> paused;
-//   QVector<Electrode> electrodesVec;
+  QVector<Electrode> electrodesVec;
+  bool paused = false;
+  bool stopCurrentRound = false;
+  int currentRound = 0;
 
-//   void treatmentRound(int offsetHz, int roundNum);
-//   int calculateBaseline();
-  // Helper function to apply treatment concurrently
+
 };
 
 #endif // SESSION_H

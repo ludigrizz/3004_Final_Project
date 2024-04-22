@@ -85,29 +85,38 @@ private slots:
    void turnOnLED(QLabel *LED);
    void turnOffLED(QLabel *redLED);
 //    void updateDateTime(const QDateTime &dateTime);
+   void on_newSessionBtn_clicked();
+   void on_sessionLogBtn_clicked();
+   void on_dateAndTimeBtn_clicked();
+   void on_backBtn_clicked();
+   void on_backBtn_2_clicked();
+   void on_backBtn_3_clicked();
+   void on_cancelChangeBtn_clicked();
+   void on_powerBtn_released();
+   void displayDateTime(const QDateTime &dateTime);
 
-    void on_newSessionBtn_clicked();
-    void on_sessionLogBtn_clicked();
-    void on_dateAndTimeBtn_clicked();
-    void on_backBtn_clicked();
-    void on_backBtn_2_clicked();
-    void on_backBtn_3_clicked();
-    void on_cancelChangeBtn_clicked();
-    void on_powerBtn_released();
-    void displayDateTime(const QDateTime &dateTime);
+   // pause/start controls
+   void on_stopBtn_2_clicked();
+   void on_pauseBtn_2_clicked();
+   void on_startBtn_2_clicked();
+   void on_dateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
+   void on_confirmChangeBtn_clicked();
+   void on_redled_toggled(bool checked);
+   void on_blueled_toggled(bool checked);
+   void on_greenled_toggled(bool checked);
 
-    // pause/start controls
-    void on_stopBtn_2_clicked();
-    void on_pauseBtn_2_clicked();
-    void on_startBtn_2_clicked();
-    void on_dateTimeEdit_dateTimeChanged(const QDateTime &dateTime);
-    void on_confirmChangeBtn_clicked();
-    void on_redled_toggled(bool checked);
-    void on_blueled_toggled(bool checked);
-    void on_greenled_toggled(bool checked);
-    void on_listWidget_2_itemClicked(QListWidgetItem *item);
-    void on_uploadSessBtn_clicked();
-    void toggleBlueLightOn();
+   void on_listWidget_2_itemClicked(QListWidgetItem *item);
+   void on_uploadSessBtn_clicked();
+   void toggleBlueLightOn();
+   void onSessionStarted();
+   void updateUIforTreatment();
+
+   void updateUIforTreatment2();
+   void updateUIOnPause();
+   void onSessionEnded();
+
+   void toggleBlueLightOn();
+   void toggleBlueLightOff();
 
 };
 #endif // MAINWINDOW_H
