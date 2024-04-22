@@ -3,6 +3,7 @@
 
 #include <QDockWidget>
 #include "mainwindow.h"
+#include "listhandler.h"
 
 namespace Ui {
 class pcwindow;

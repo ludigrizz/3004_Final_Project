@@ -1,11 +1,15 @@
 #include "pcwindow.h"
 #include "ui_pcwindow.h"
+#include "listhandler.h"
 
 pcwindow::pcwindow(QWidget *parent) :
     QDockWidget(parent),
     ui(new Ui::pcwindow)
 {
     ui->setupUi(this);
+
+    listHandler lhandle_pc;
+    lhandle_pc.loadFileToList(ui->listWidget, "data.txt");
 
     uploadItem("uploaded first item");
     QStringList sessItems = {"up1", "up2", "up3"};

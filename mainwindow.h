@@ -18,6 +18,7 @@
 #include "handleconnection.h"
 #include <QListWidget>
 #include "pcwindow.h"
+#include "listhandler.h"
 
 
 QT_BEGIN_NAMESPACE

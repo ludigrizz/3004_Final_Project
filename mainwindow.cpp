@@ -13,6 +13,7 @@
 #include "digitalclock.h"
 #include "test.cpp"
 #include "session.h"
+#include "listhandler.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -105,8 +106,10 @@ MainWindow::MainWindow(QWidget *parent)
    connect(timer, SIGNAL(timeout()), this, SLOT(updateSessTimer()));
    ui->sessTimer->display(formatTime(remainingTime));
 
+   listHandler lhandler;
+   lhandler.writeToFile(ui->listWidget_2, "data.txt");
 
-   //pcwindow pc;
+//pcwindow pc;
 //   pc = new Ui::pcwindow;
 //   addDockWidget(Qt::RightDockWidgetArea, pcWindow);
 //   connect(this, &MainWindow::sessionSelected, pcWindow, &PCWindow::uploadItem);
@@ -649,5 +652,5 @@ void MainWindow::on_uploadSessBtn_clicked()
     qDebug() << "Selected session to upload is: " << selectedSession;
 
     //emit sessionSelected(selectedSession);
-
+    writeToFile(selectedSession, "data.txt");
 }

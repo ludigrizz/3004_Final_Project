@@ -19,12 +19,14 @@ SOURCES += \
     graph.cpp \
     handleconnection.cpp \
     ledindicator.cpp \
+    listhandler.cpp \
     main.cpp \
     mainwindow.cpp \
     pcwindow.cpp \
     qcustomplot.cpp \
     session.cpp \
     test.cpp \
+    uploadlisthandler.cpp \
     wave.cpp
     pcwindow.cpp
 
@@ -40,10 +42,12 @@ HEADERS += \
     graph.h \
     handleconnection.h \
     ledindicator.h \
+    listhandler.h \
     mainwindow.h \
     pcwindow.h \
     qcustomplot.h \
     session.h \
+    uploadlisthandler.h \
     wave.h
     pcwindow.h
 
@@ -60,5 +64,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     icons/Screenshot 2024-04-17 at 2.33.06 PM.png \
     icons/blue.png \
+    icons/data.txt \
     icons/green.png \
     icons/red.png
