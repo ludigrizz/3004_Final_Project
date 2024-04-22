@@ -650,7 +650,4 @@ void MainWindow::on_uploadSessBtn_clicked()
 {
     // call some function to add to the text list of sessions for the pc where you can then call the add list function in pcwindow.h
     qDebug() << "Selected session to upload is: " << selectedSession;
-
-    //emit sessionSelected(selectedSession);
-    writeToFile(selectedSession, "data.txt");
 }
