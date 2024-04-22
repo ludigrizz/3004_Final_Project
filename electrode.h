@@ -9,25 +9,21 @@
 
 class Electrode {
 public:
-  // Constructor
-  Electrode(Wave alpha, Wave beta, Wave delta, Wave theta);
+   // Constructor
+   Electrode(Wave alpha, Wave beta, Wave delta, Wave theta);
 
-  // Methods
-  void calculateDominantFrequency() ;
-  void applyTreatment(int x);
-
-  // Getter
-  int getDominantFrequency() const;
-  void setDominantFrequency(int newDomFreq);
+   // Methods
+   void calculateDominantFrequency() ;
+   void applyTreatment(int x);
 
    // Getter
    int getDominantFrequency(int) const;
+   void setDominantFrequency(int newDomFreq);
    int getFrequency(int) const;
    double getAvgDominantFrequency() const;
 
 private:
    QVector<int> dominantFrequency;
-   int dominantFrequency;
    int alphaFreq;
    int betaFreq;
    int deltaFreq;
@@ -36,6 +32,10 @@ private:
    int betaAmp;
    int deltaAmp;
    int thetaAmp;
+
 };
 
 #endif // ELECTRODE_H
+
+
+
