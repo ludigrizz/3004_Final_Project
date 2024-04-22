@@ -17,7 +17,7 @@
 #include "session.h"
 #include "handleconnection.h"
 #include <QListWidget>
-//#include "pcwindow.h"
+#include "pcwindow.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -52,7 +52,9 @@ private:
     Session *session;
     HandleConnection handleConnection;
     QString selectedSession;
-     pcwindow *pcwindow;
+    //Ui::pcwindow *pc;
+
+    //pcwindow *pcwindow;
 
     void togglePower();
     // battery level functions
@@ -76,6 +78,8 @@ private:
     void addSessionLog(QListWidget *listWidget, const QString &sessEntry);
     void addSessionLogs(QListWidget *listWidget, const QStringList &sessEntries);
 
+signals:
+    void sessionSelected(const QString &data);
 
 private slots:
    // session timers

@@ -15,7 +15,7 @@ class Session : public QObject {
    Q_OBJECT
 public:
   // Constructor
-  explicit Session(Electrode electrodes[], int size, QObject *parent = nullptr);
+  explicit Session(Electrode electrodes[], int size);
   QDateTime getSessionStartTime() const;
 
    void treatmentRound(int offsetHz, int roundNum);
@@ -27,13 +27,13 @@ public:
 
 //   void startSessionProcess();
   //void treatmentRound(QVector<Electrode>& electrodes, int offsetHz, int roundNum);
-  //void calculateElectrodeFrequencies(QVector<Electrode>& electrodes);
+  void calculateElectrodeFrequencies(QVector<Electrode>& electrodes);
   //int calculateBaseline(QVector<Electrode>& electrodes, int size);
   //void applyTreatmentFunc(Electrode& electrode, int offsetHz);
 
 //   void treatmentRound(int offsetHz, int roundNum);
 //   int calculateBaseline();
-  int getOverallAverageDominantFreq() { return overallAverageDominantFreq; };
+  //int getOverallAverageDominantFreq() { return overallAverageDominantFreq; };
   QTimer* getTimer() { return timer; }
   bool getPaused() { return paused; }
 //   void pause();
@@ -55,12 +55,12 @@ private:
    // Helper function to apply treatment concurrently
    QVector<Electrode>electrodesVec1;
 //   int overallAverageDominantFreq;
-//   QTimer *timer;
-//   QDateTime startTime;
-//   int numElectrodes;
+    QTimer *timer;
+    QDateTime startTime;
+   int numElectrodes;
 //   int currentRound;
 //   int currentOffset;
-//   std::atomic<bool> paused;
+     std::atomic<bool> paused;
 //   QVector<Electrode> electrodesVec;
 
 //   void treatmentRound(int offsetHz, int roundNum);

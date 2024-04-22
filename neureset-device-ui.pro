@@ -21,6 +21,7 @@ SOURCES += \
     ledindicator.cpp \
     main.cpp \
     mainwindow.cpp \
+    pcwindow.cpp \
     qcustomplot.cpp \
     session.cpp \
     test.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     handleconnection.h \
     ledindicator.h \
     mainwindow.h \
+    pcwindow.h \
     qcustomplot.h \
     session.h \
     wave.h

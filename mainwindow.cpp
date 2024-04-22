@@ -105,6 +105,14 @@ MainWindow::MainWindow(QWidget *parent)
    connect(timer, SIGNAL(timeout()), this, SLOT(updateSessTimer()));
    ui->sessTimer->display(formatTime(remainingTime));
 
+
+   //pcwindow pc;
+//   pc = new Ui::pcwindow;
+//   addDockWidget(Qt::RightDockWidgetArea, pcWindow);
+//   connect(this, &MainWindow::sessionSelected, pcWindow, &PCWindow::uploadItem);
+
+   //pc = new pcwindow(parentPtr) ;
+   //pc->show();
 }
 
 MainWindow::~MainWindow()
@@ -256,6 +264,8 @@ QString MainWindow::formatTime(int totalSeconds) {
 
 void MainWindow::updateSessTimer() {
     qDebug() << "remainging:" << remainingTime;
+
+
     if (remainingTime>0) {
         remainingTime--;
         ui->sessTimer->display(formatTime(remainingTime));
@@ -280,7 +290,7 @@ void MainWindow::updateSessTimer() {
             qDebug() << "feedback";
         } else if (remainingTime == 6) {
             //on_greenled_toggled(false);
-            qDebug() << "getting df";
+            qDebug() << "getting df 0";
             int freq = session->getDominantFrequency(0, 0);
             graph->updateGraph(currtime, freq);
 
@@ -295,7 +305,7 @@ void MainWindow::updateSessTimer() {
             qDebug() << "feedback";
 
         } else if (remainingTime == 5) {
-            qDebug() << "getting df";
+            qDebug() << "getting df 1";
             int freq = session->getDominantFrequency(0, 1);
             graph->updateGraph(currtime, freq);
 
@@ -308,7 +318,7 @@ void MainWindow::updateSessTimer() {
             qDebug() << "feedback";
 
         } else if (remainingTime == 4) {
-            qDebug() << "getting df";
+            qDebug() << "getting df 2";
             int freq = session->getDominantFrequency(0, 2);
             graph->updateGraph(currtime, freq);
 
@@ -323,7 +333,7 @@ void MainWindow::updateSessTimer() {
             qDebug() << "feedback";
 
         } else if (remainingTime == 3) {
-            qDebug() << "getting df";
+            qDebug() << "getting df 3";
             int freq = session->getDominantFrequency(0, 3);
             graph->updateGraph(currtime, freq);
 
@@ -339,7 +349,29 @@ void MainWindow::updateSessTimer() {
         }
 
     } else{
-        on_stopBtn_2_clicked();
+        //on_stopBtn_2_clicked();
+        qInfo("stOP");
+        timer->stop();
+        remainingTime = 90;
+        ui->sessTimer->display(formatTime(remainingTime));
+
+        // reset graph
+        clearGraph();
+
+
+        // log session
+        QTime currentTime = QTime::currentTime();
+        qDebug() << "Current time:" << currentTime.toString();
+        // To specify the format explicitly:
+
+        QString data = "" ;
+        data.append(currentTime.toString("HH:mm:ss"));
+        double frequency = session->getAvgDominantFrequency(0);  // Get the frequency as a double
+        QString frequencyStr = QString::number(frequency, 'f', 2);
+        data.append( " dominant freq: "+ frequencyStr);
+        addSessionLog(ui->listWidget_2, data);
+
+
     }
 }
 
@@ -604,6 +636,7 @@ void MainWindow::clearGraph() {
     ui->customPlot->clearGraphs();
     ui->customPlot->replot();
     qDebug() << "clear";
+}
 
 void MainWindow::on_listWidget_2_itemClicked(QListWidgetItem *item)
 {
@@ -614,4 +647,7 @@ void MainWindow::on_uploadSessBtn_clicked()
 {
     // call some function to add to the text list of sessions for the pc where you can then call the add list function in pcwindow.h
     qDebug() << "Selected session to upload is: " << selectedSession;
+
+    //emit sessionSelected(selectedSession);
+
 }

@@ -2,21 +2,24 @@
 
 Session::Session(Electrode electrodes[], int size) {
 
+     numElectrodes = size;
+
     electrodesVec1.reserve(size);
+
+    //Convert array to vector for flexibility
+    for (int i = 0; i < size; ++i) {
+        electrodesVec1.append(electrodes[i]);
+    }
+
     
 }
 void Session::startSession() {
    emit sessionStarted();
 
-   qDebug().nospace() << "Overall average dominant frequency (DRF) at start of session is " << calculateBaseline(electrodesVec, numElectrodes);
-
-     //Convert array to vector for flexibility
-     for (int i = 0; i < size; ++i) {
-         electrodesVec1.append(electrodes[i]);
-     }
+   //qDebug().nospace() << "Overall average dominant frequency (DRF) at start of session is " << calculateBaseline(electrodesVec1, numElectrodes);
 
    // Convert array to vector for flexibility
-   std::vector<Electrode> electrodesVec(electrodes, electrodes + size); //c: unused
+   //std::vector<Electrode> electrodesVec(electrodes, electrodes + size); //c: unused
   // qDebug().nospace() << "Overall average dominant frequency (DRF) at end of session is " << calculateBaseline(electrodesVec, numElectrodes);
 
   // qDebug().nospace() << "Overall average dominant frequency (DRF) at start of session is " << calculateBaseline(electrodesVec, size);
@@ -79,7 +82,7 @@ void Session::treatmentRound(int offsetHz, int roundNum) {
        thread.join();
    }
 
-   calculateElectrodeFrequencies(electrodes);
+   calculateElectrodeFrequencies(electrodesVec1);
 
 
    qDebug().nospace() << "***End of " << roundNum << "***";
@@ -177,7 +180,7 @@ int Session::getFrequency(int index, int time) {
 
 //   return overallAverageDominantFreq;
 
-// }
+}
 
 int Session::getDominantFrequency(int index, int t_id) {
     return electrodesVec1.at(index).getDominantFrequency(t_id);
