@@ -5,6 +5,8 @@ and PC View for EEG graphing and monitoring. Main tasks available on the
 application include: session logging and treatment, session history, and application
 (device) configuration of date and time.
 
+Link to Youtube Demo Video: https://youtu.be/OxkL4dZwXso
+
 Track and view changes in the [project board](https://www.drupal.org/project/issues/admin_menu](https://github.com/users/ludigrizz/projects/1)). The contributions 
 and distribution of work for each person are visible in the github board.
 Contributors: Sofia, Elsa, Christina
